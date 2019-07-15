@@ -30,8 +30,8 @@ calculate TPM for coding gene}
     library("GenomicFeatures")
     library("org.Mm.eg.db")
     flsall <- getBamFileList()
-    txdb <- makeTxDbFromUCSC(genome="mm9", tablename="refGene")
-    seqlevels(txdb) <-"chr19"
+    extpath <- system.file("extdata", "mm9.chr19.refGene.R.DB", package="APAlyzer")
+    txdb=loadDb(extpath, packageName='GenomicFeatures')
     IDDB <- org.Mm.eg.db
     CDSdbraw=REFCDS(txdb,IDDB)
     DFGENEraw=GENEXP_CDS(CDSdbraw, flsall, Strandtype="forward")
