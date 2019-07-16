@@ -1,7 +1,7 @@
 Package: APAlyzer
 Type: Package
 Title: A toolkit for APA analysis using RNA-seq data
-Version: 0.99.0
+Version: 0.99.1
 Date: 2019-07-14
 Description: Perform 3'UTR APA, Intronic APA and gene expression analysis using RNA-seq data.
 Author: Ruijia Wang [aut, cre],(0000-0002-4211-5207),
