@@ -17,13 +17,13 @@
     Build 3'UTR PAS Reference for distal and proximal PAS.
 }
 \value{
-    The function \code{REFCDS()} returns a genomic ranges of aUTR(pPAS to dPAS)
+    The function \code{REF3UTR()} returns a genomic ranges of aUTR(pPAS to dPAS)
     and cUTR(cdsend to pPAS) regions for each gene
 }
 \author{Ruijia Wang}
 \examples{
 ## build Reference ranges for 3'UTR PASs in human
-    extpath <- system.file("extdata", "mm9_REF.RData", package="APAlyzer")
+    extpath = system.file("extdata", "mm9_REF.RData", package="APAlyzer")
     load(extpath)
     refUTRraw=refUTRraw[which(refUTRraw$Chrom=='chr19'),]
     UTRdbraw=REF3UTR(refUTRraw)

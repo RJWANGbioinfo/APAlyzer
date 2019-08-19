@@ -30,11 +30,11 @@
     library("TBX20BamSubset")
     library("Rsamtools")
     library("GenomicAlignments")
-    flsall <- getBamFileList()
-    extpath <- system.file("extdata", "mm9_REF.RData", package="APAlyzer")
+    flsall = getBamFileList()
+    extpath = system.file("extdata", "mm9_REF.RData", package="APAlyzer")
     load(extpath)
-    refUTRraw=refUTRraw[which(refUTRraw$Chrom=='chr19'),]
-    UTRdbraw=REF3UTR(refUTRraw)
-    DFUTRraw=PASEXP_3UTR(UTRdbraw, flsall, Strandtype="forward")
+    refUTRraw = refUTRraw[which(refUTRraw$Chrom=='chr19'),]
+    UTRdbraw = REF3UTR(refUTRraw)
+    DFUTRraw = PASEXP_3UTR(UTRdbraw, flsall, Strandtype="forward")
 
 }

@@ -27,7 +27,9 @@
     "forward" is forwand sequencing,
     "invert" is reverse sequencing and
     "NONE" is non-strand specific, Default is "NONE".}
-    \item{nts}{number of threads used for computing}
+    \item{nts}{number of threads used for computing, 
+    parameter used by \link[Rsubread:featureCounts]{featureCounts}, 
+    nthread option, Default is 1}
     }
 \description{
     Map reads to IPA regions and
@@ -46,8 +48,8 @@
     library("TBX20BamSubset")
     library("Rsamtools")
     library("GenomicAlignments")
-    flsall <- getBamFileList()
-    extpath <- system.file("extdata", "mm9_REF.RData", package="APAlyzer")
+    flsall = getBamFileList()
+    extpath = system.file("extdata", "mm9_REF.RData", package="APAlyzer")
     load(extpath)
     IPA_OUTraw=PASEXP_IPA(dfIPA, dfLE, flsall, Strandtype="forward", nts=1)
 }

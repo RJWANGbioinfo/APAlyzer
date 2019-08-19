@@ -116,19 +116,19 @@
     trtlen=length(col9S)
     conlen=length(col10S)    
     if(trtlen>1 & conlen>1){
-    dfsubXXX$pvalue <- apply(dfsubXXX[,c(col9S,col10S)], 
+    dfsubXXX$pvalue = apply(dfsubXXX[,c(col9S,col10S)], 
                     1, function (x) {t.test(x[seq_len(trtlen)],
                     x[(1+trtlen):(trtlen+conlen)])$p.value})
     }
 
     if(trtlen>1 & conlen==1){
-    dfsubXXX$pvalue <- apply(dfsubXXX[,c(col9S,col10S)], 
+    dfsubXXX$pvalue = apply(dfsubXXX[,c(col9S,col10S)], 
                     1, function (x) {t.test(x[seq_len(trtlen)],
                     mu=x[(1+trtlen):(trtlen+conlen)])$p.value})
     }    
     
     if(trtlen==1 & conlen>1){
-    dfsubXXX$pvalue <- apply(dfsubXXX[,c(col9S,col10S)], 
+    dfsubXXX$pvalue = apply(dfsubXXX[,c(col9S,col10S)], 
                     1, function (x) {t.test(mu=x[seq_len(trtlen)],
                     x[(1+trtlen):(trtlen+conlen)])$p.value})
     }
@@ -171,8 +171,8 @@
     typecols=c(grep("APAreg_", colnames(xxxx)))
     xxxx$RED=rowMeans(xxxx[,RUDcols], na.rm = TRUE)
     xxxx$Min_pv=apply(xxxx[, pvcols], 1, .absMIN)
-    xxxx$coutUP<-rowSums(xxxx[, typecols]=='UP')
-    xxxx$coutDN<-rowSums(xxxx[, typecols]=='DN')
+    xxxx$coutUP=rowSums(xxxx[, typecols]=='UP')
+    xxxx$coutDN=rowSums(xxxx[, typecols]=='DN')
     sizeCUT=.calsizeCUT(dfpair,proCUT)
     xxxx=.finaltype(xxxx,sizeCUT)
     xxxx=xxxx[,c('gene_symbol','RED','Min_pv','APAreg')]
@@ -279,8 +279,8 @@
     typecols=c(grep("APAreg_", colnames(xxxx)))
     xxxx$RED=rowMeans(xxxx[,RUDcols], na.rm = TRUE)
     xxxx$Min_pv=apply(xxxx[, pvcols], 1, .absMIN)
-    xxxx$coutUP<-rowSums(xxxx[, typecols]=='UP')
-    xxxx$coutDN<-rowSums(xxxx[, typecols]=='DN')
+    xxxx$coutUP=rowSums(xxxx[, typecols]=='UP')
+    xxxx$coutDN=rowSums(xxxx[, typecols]=='DN')
     sizeCUT=.calsizeCUT(dfpair,proCUT)
     xxxx=.finaltype(xxxx,sizeCUT)
     xxxx=xxxx[,c('gene_symbol','PASid','RED','Min_pv','APAreg')]

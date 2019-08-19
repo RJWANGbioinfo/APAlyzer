@@ -139,13 +139,13 @@ PASEXP_IPA<-function(dfIPAraw, dfLEraw, flS, Strandtype="NONE", nts=1){
         LElength=LElength[,c('gene_symbol','Chrom','Strand','length')]
 
         IPAstr=.get_strand_IPA(STRINFOR)
-        UPtblraw <- featureCounts(fls,annot.ext=UPref,
+        UPtblraw = featureCounts(fls,annot.ext=UPref,
                                     strandSpecific=IPAstr,
                                     allowMultiOverlap=TRUE,nthreads=nts)
-        DNtblraw <- featureCounts(fls,annot.ext=DNref,
+        DNtblraw = featureCounts(fls,annot.ext=DNref,
                                     strandSpecific=IPAstr,
                                     allowMultiOverlap=TRUE,nthreads=nts)
-        LEtblraw <- featureCounts(fls,annot.ext=LEref,
+        LEtblraw = featureCounts(fls,annot.ext=LEref,
                                     strandSpecific=IPAstr,
                                     allowMultiOverlap=TRUE,nthreads=nts)
 
@@ -157,7 +157,7 @@ PASEXP_IPA<-function(dfIPAraw, dfLEraw, flS, Strandtype="NONE", nts=1){
         dfout=merge(dfout,LEtbl,by="gene_symbol")
         dfoutRE=.calIPA_RE(dfout,SPNAME)
         dfout=merge(dfout,dfoutRE, by = "IPAID", all.x=TRUE)
-        dfout[is.na(dfout)] <- 0
+        dfout[is.na(dfout)] = 0
 
         if(k==1)
         {

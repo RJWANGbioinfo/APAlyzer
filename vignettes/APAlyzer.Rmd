@@ -19,11 +19,11 @@ vignette: >
 
 # About APAlyzer
 APAlyzer is a toolkit for bioinformatic analysis of alternative polyadenylation 
-(APA) events using RNA sequencing data. Our main approach is comparison of s
-equencing reads in regions demarcated by high quality polyadenylation sites 
+(APA) events using RNA sequencing data. Our main approach is comparison of 
+sequencing reads in regions demarcated by high quality polyadenylation sites 
 (PASs) annotated in the PolyA_DB database 
 (http://exon.njms.rutgers.edu/polya_db/v3/) [@Wang_2017; @Wang_2018]. 
-The current version (v1.0) uses RNA-seq data to examine APA events in 3’ 
+The current version (v3.0) uses RNA-seq data to examine APA events in 3’ 
 untranslated regions (3’UTRs) and in introns. The coding regions are used 
 for gene expression calculation.
 
@@ -41,8 +41,13 @@ Alternatively, it can also be installed as follows:
 R CMD INSTALL APAlyzer.tar.gz
 ```
 
-After installation, APAlyzer can be used by:
+In additions, user can also install development version of APAlyzer directly from GitHub:
 ```{r eval=FALSE}
+BiocManager::install('RJWANGbioinfo/APAlyzer')
+```
+
+After installation, APAlyzer can be used by:
+```{r}
 library(APAlyzer)
 ```
 
@@ -56,10 +61,10 @@ example BAM files in the `r BiocStyle::Biocpkg("TBX20BamSubset")`
 [@TBX20BamSubset] data package. In this example, 
 BAM files correspond to mouse RNA-seq data, (mapped to mm9).
 
-```{r eval=FALSE}
-library("TBX20BamSubset")
-library("Rsamtools")
-flsall <- getBamFileList()
+```{r eval=TRUE}
+suppressMessages(library("TBX20BamSubset"))
+suppressMessages(library("Rsamtools"))
+flsall = getBamFileList()
 flsall
 ```
 
@@ -67,32 +72,32 @@ flsall
 PAS references in the genome (both 3’UTRs and introns) are required by our 
 package. We have pre-built a reference file for the mouse genome (mm9), 
 which can be loaded from `extdata`:
-```{r}
-extpath <- system.file("extdata", "mm9_REF.RData", package="APAlyzer")
+```{r eval=TRUE}
+extpath = system.file("extdata", "mm9_REF.RData", package="APAlyzer")
 load(extpath, verbose=TRUE)
 ```
 This `extdata` covers 3’UTR APA regions (refUTRraw), IPA regions (dfIPA), 
 and 3’-most exon regions (dfLE). The `refUTRraw` is a data frame containing 
 6 columns for genomic information of 3’UTR PASs:
-```{r}
+```{r eval=TRUE}
 head(refUTRraw,2)
 ```
 `dfIPA` is a data frame containing 8 columns for Intronic PASs; ‘upstreamSS’ 
 means the closest 5’ or 3’ splice site to IPA, ‘downstreamSS’ 
 means closest 3’ splice site:
-```{r}
+```{r eval=TRUE}
 head(dfIPA,2)
 ```
 `dfLE` is a data frame containing 5 colmuns for 3’ least exon; 
 ‘LEstart’ means the start genomic position of last 3’ exon.
-```{r}
+```{r eval=TRUE}
 head(dfLE,2)
 ```
 
 In additions to mouse mm9, our package has also a pre-build version 
 for human hg19 genome:
-```{r}
-extpath <- system.file("extdata", "hg19_REF.RData", package="APAlyzer")
+```{r eval=TRUE}
+extpath = system.file("extdata", "hg19_REF.RData", package="APAlyzer")
 load(extpath, verbose=TRUE)
 ```
 
@@ -111,8 +116,7 @@ UTRdbraw=REF3UTR(refUTRraw)
 The `REF3UTR` function returns a genomic range containing aUTR(pPAS to dPAS) 
 and cUTR(cdsend to pPAS) regions for each gene:
 ```{r, echo = FALSE}
-library(APAlyzer)
-extpath <- system.file("extdata", "mm9_REF.RData", package="APAlyzer")
+extpath = system.file("extdata", "mm9_REF.RData", package="APAlyzer")
 load(extpath)
 refUTRraw=refUTRraw[which(refUTRraw$Chrom=='chr19'),]
 UTRdbraw=REF3UTR(refUTRraw)
@@ -126,17 +130,16 @@ Once cUTR and aUTR regions are defined, the RE of 3’UTR APA of each gene
 can be calculated by `PASEXP_3UTR`:
 ```{r, echo = FALSE}
 options(warn=-1)
-suppressMessages(library(APAlyzer))
 suppressMessages(library("TBX20BamSubset"))
 suppressMessages(library("Rsamtools"))
-extpath <- system.file("extdata", "mm9_REF.RData", package="APAlyzer")
+extpath = system.file("extdata", "mm9_REF.RData", package="APAlyzer")
 load(extpath)
 flsall <- getBamFileList()
 refUTRraw=refUTRraw[which(refUTRraw$Chrom=='chr19'),]
 UTRdbraw=REF3UTR(refUTRraw)
 ```
 
-```{r}
+```{r eval=TRUE}
 DFUTRraw=PASEXP_3UTR(UTRdbraw, flsall, Strandtype="forward")
 ```
 The `PASEXP_3UTR` 3UTR requires two inputs: 1) aUTR and cUTR 
@@ -146,7 +149,7 @@ sequencing using `Strandtype`. The detailed usage can also
 be obtained by the command `?PASEXP_3UTR`.The output data 
 frame covers reads count (in aUTR or cUTR), RPKM (in 
 aUTR or cUTR) and RE (log2(aUTR/cUTR)) for each gene:
-```{r}
+```{r eval=TRUE}
 head(DFUTRraw,2)
 ```
 
@@ -157,15 +160,15 @@ Analysis of IPA requires two genomic regions: IPA regions and 3’-most exons.
 As mentioned above, these regions in mouse and human genomes have been 
 pre-built in the package:
 
-```{r eval=FALSE}
+```{r eval=TRUE}
 #mouse(mm9):
-extpath <- system.file("extdata", "mm9_REF.RData", package="APAlyzer")
+extpath = system.file("extdata", "mm9_REF.RData", package="APAlyzer")
 load(extpath)
 ```
 
-```{r eval=FALSE}
+```{r eval=TRUE}
 #human(hg19):
-extpath <- system.file("extdata", "hg19_REF.RData", package="APAlyzer")
+extpath = system.file("extdata", "hg19_REF.RData", package="APAlyzer")
 load(extpath)
 ```
 
@@ -178,15 +181,16 @@ dfLE=dfLE[which(dfLE$Chrom=='chr19'),]
 IPA_OUTraw=PASEXP_IPA(dfIPA, dfLE, flsall, Strandtype="forward", nts=1)
 ```
 Note that, as a specific feature for IPA, one can set more threads using 
-‘nts=’ to increase calculation speed. The detailed usage 
-can be obtained by the command `?PASEXP_IPA`.
+‘nts=’(the parameter passed to Rsubread::featureCounts, 
+check `?Rsubread::featureCounts` for details) to increase calculation speed. 
+The detailed usage can be obtained by the command `?PASEXP_IPA`.
 
 The output data frame contains read count and read density IPA upstream (a), 
 IPA downstream (b) and 3’-most exon region (c). 
 The RE of IPA is calculated as log2((a - b)/c).
 
 ```{r, echo = FALSE}
-extpath <- system.file("extdata", "mm9_TBX20.APAout.RData", package="APAlyzer")
+extpath = system.file("extdata", "mm9_TBX20.APAout.RData", package="APAlyzer")
 load(extpath)
 ```
 
@@ -204,18 +208,18 @@ A sample table will be generated according to the design:
 
 ```{r, echo = FALSE}
 options(warn=-1)
-extpath <- system.file("extdata", "mm9_TBX20.APAout.RData", package="APAlyzer")
+extpath = system.file("extdata", "mm9_TBX20.APAout.RData", package="APAlyzer")
 load(extpath)
 ```
 
-```{r}
+```{r eval=TRUE}
 # Build the sample table with replicates
 sampleTable1 = data.frame(samplename = c(names(flsall)),
                     condition = c(rep("NT",3),rep("KD",3)))
 sampleTable1
 ```
 
-```{r}
+```{r eval=TRUE}
 # Build the sample table without replicates
 sampleTable2 = data.frame(samplename = c("SRR316184","SRR316187"),
                     condition = c("NT","KD")) 
@@ -231,7 +235,7 @@ used here is called `APAdiff` (detailed information can be obtained by the
 command `?APAdiff`). It will fist to go through the sample table to 
 determine whether it is a replicate design or non-replicate design. 
 Then the APA compassion will be performed.
-```{r}
+```{r eval=TRUE}
 # Analysis 3'UTR APA between KD and NT group using non-repilicate design
 test_3UTRsing=APAdiff(sampleTable2,DFUTRraw, 
                         conKET='NT',
@@ -247,7 +251,7 @@ step. The group name, i.e., treatment or control, can be defined b
 and the read cutoff used for aUTR and cUTR is defined by `CUTreads=` 
 with the default value being 0. In the non-replicate design, the APA pattern 
 will be compared between two samples and output will be shown in a data frame:
-```{r}
+```{r eval=TRUE}
 head(test_3UTRsing,2)
 table(test_3UTRsing$APAreg)
 ```
@@ -264,7 +268,7 @@ p-value<0.05; ‘NC’ are the remaining genes. With respect to 3’UTR size cha
 For the replicate design, we use t-test for significance analysis. However, 
 other tools based on negative binomial data distribution, such as  
 `r BiocStyle::Biocpkg("DEXSeq")` [@DEXSEQ] might also be used.
-```{r}
+```{r eval=TRUE}
 # Analysis 3'UTR APA between KD and NT group using multi-repilicate design
 test_3UTRmuti=APAdiff(sampleTable1,
                         DFUTRraw, 
@@ -289,7 +293,7 @@ as up-regulation of IPA (RED > 0); ‘DN’ is the opposite;
 and ‘NC’ is the remaining genes.
 
 Analysis of IPA between KD and NT groups without replicates is shown here:
-```{r} 
+```{r eval=TRUE} 
 test_IPAsing=APAdiff(sampleTable2,
                         IPA_OUTraw, 
                         conKET='NT',
@@ -300,7 +304,7 @@ head(test_IPAsing,2)
 ```
 
 Analysis of IPA between KD and NT groups using replicate data is shown here:
-```{r}
+```{r eval=TRUE}
 test_IPAmuti=APAdiff(sampleTable1,
                         IPA_OUTraw, 
                         conKET='NT',
@@ -316,46 +320,41 @@ CDF curves. For the previous 3’UTR APA and IPA comparison outputs, one needs
 to first build the plotting data frame: 
 ```{r, echo = FALSE}
 options(warn=-1)
-extpath <- system.file("extdata", 
+extpath = system.file("extdata", 
                         "mm9_TBX20.APAdiff_OUT.RData", 
                         package="APAlyzer")
 load(extpath)
 ```
-```{r}
+```{r eval=TRUE}
 test_3UTRmuti$APA="3'UTR"
 test_IPAmuti$APA="IPA"
 dfplot=rbind(test_3UTRmuti[,c('RED','APA')],test_IPAmuti[,c('RED','APA')])
 ```
 To make violin plots and CDF curves using `r BiocStyle::Biocpkg("ggplot2")`:
-```{r}
+```{r eval=TRUE}
 library(ggplot2)
 ```
 
-```{r eval=FALSE}
+```{r fig1, fig.height = 4, fig.width = 4, fig.align = "center"}
 ###violin
 ggplot(dfplot, aes(x = APA, y = RED)) + 
     geom_violin(trim = FALSE) + 
-    geom_boxplot(width = 0.2)+ 
+    geom_boxplot(width = 0.2)+ theme_bw() + 
     geom_hline(yintercept=0, linetype="dashed", color = "red")
 ```
 
-```{r out.width = '75%', echo = FALSE}
-library(knitr)
-include_graphics("violin.png")
-```
 
-```{r eval=FALSE}
+
+```{r fig2, fig.height = 4, fig.width = 5, fig.align = "center"}
 ###CDF
 ggplot(dfplot, aes( x = RED, color = APA)) + 
     stat_ecdf(geom = "step") +
     ylab("cumulative fraction")+ 
-    geom_vline(xintercept=0, linetype="dashed", color = "gray")+ 
+    geom_vline(xintercept=0, linetype="dashed", color = "gray")+ theme_bw() + 
     geom_hline(yintercept=0.5, linetype="dashed", color = "gray")
 ```
 
-```{r out.width = '75%', echo = FALSE}
-include_graphics("cdf.png")
-```
+
 
 # Gene expression analysis using coding regions
 APA is frequently involved in gene expression regulation. To compare gene 
@@ -364,17 +363,17 @@ function to assess the expression changes using RNA-seq reads
 mapped to coding sequences.
 
 ## Building coding region references 
-```{r eval=FALSE}
-library("GenomicFeatures")
-library("org.Mm.eg.db")
-extpath <- system.file("extdata", "mm9.chr19.refGene.R.DB", package="APAlyzer")
+```{r eval=TRUE}
+suppressMessages(library("GenomicFeatures"))
+suppressMessages(library("org.Mm.eg.db"))
+extpath = system.file("extdata", "mm9.chr19.refGene.R.DB", package="APAlyzer")
 txdb=loadDb(extpath, packageName='GenomicFeatures')
-IDDB <- org.Mm.eg.db
+IDDB = org.Mm.eg.db
 CDSdbraw=REFCDS(txdb,IDDB)
 ```
 
 ## Calculation of expression 
-```{r eval=FALSE}
+```{r eval=TRUE}
 DFGENEraw=GENEXP_CDS(CDSdbraw, flsall, Strandtype="forward")
 ```
 
@@ -388,9 +387,9 @@ Let’s say all the BAM files are stored in bamdir, then BAM file lists
 can be obtained through:
 
 ```{r eval=FALSE}
-flsall <- dir(bamdir,".bam")
-flsall<-paste0(bamdir,flsall)
-names(flsall)<-dir(bamdir,".bam")
+flsall = dir(bamdir,".bam")
+flsall=paste0(bamdir,flsall)
+names(flsall)=dir(bamdir,".bam")
 ```  
 
 **Why am I getting error messages when I try to get txdb using makeTxDbFromUCSC?**
@@ -413,4 +412,3 @@ We thank members of the Bin Tian lab for helpful discussions
 and package testing.
 
 # References
-

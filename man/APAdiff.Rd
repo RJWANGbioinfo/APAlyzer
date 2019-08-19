@@ -29,8 +29,8 @@ statistics significance between two sample groups}
 \examples{
     library("TBX20BamSubset")
     library("Rsamtools")
-    flsall <- getBamFileList()
-    extpath <- system.file("extdata",
+    flsall = getBamFileList()
+    extpath = system.file("extdata",
     "mm9_TBX20.APAout.RData", package="APAlyzer")
     load(extpath)
     sampleTable1 = data.frame(samplename = c(names(flsall)),

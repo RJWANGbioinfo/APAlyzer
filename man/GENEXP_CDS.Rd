@@ -29,11 +29,11 @@ calculate TPM for coding gene}
     library("GenomicAlignments")
     library("GenomicFeatures")
     library("org.Mm.eg.db")
-    flsall <- getBamFileList()
-    extpath <- system.file("extdata", "mm9.chr19.refGene.R.DB", package="APAlyzer")
-    txdb=loadDb(extpath, packageName='GenomicFeatures')
-    IDDB <- org.Mm.eg.db
-    CDSdbraw=REFCDS(txdb,IDDB)
-    DFGENEraw=GENEXP_CDS(CDSdbraw, flsall, Strandtype="forward")
+    flsall = getBamFileList()
+    extpath = system.file("extdata", "mm9.chr19.refGene.R.DB", package="APAlyzer")
+    txdb = loadDb(extpath, packageName='GenomicFeatures')
+    IDDB = org.Mm.eg.db
+    CDSdbraw = REFCDS(txdb,IDDB)
+    DFGENEraw = GENEXP_CDS(CDSdbraw, flsall, Strandtype="forward")
 
 }

@@ -21,8 +21,8 @@
 ## build Reference ranges for CDS in human coding genes
     library("GenomicFeatures")
     library("org.Mm.eg.db")
-    extpath <- system.file("extdata", "mm9.chr19.refGene.R.DB", package="APAlyzer")
-    txdb=loadDb(extpath, packageName='GenomicFeatures')
-    IDDB <- org.Mm.eg.db
-    CDSdbraw=REFCDS(txdb,IDDB)
+    extpath = system.file("extdata", "mm9.chr19.refGene.R.DB", package="APAlyzer")
+    txdb = loadDb(extpath, packageName='GenomicFeatures')
+    IDDB = org.Mm.eg.db
+    CDSdbraw = REFCDS(txdb,IDDB)
 }

@@ -22,28 +22,21 @@
 }
 
 .getcount<-function(DB,BMAfile,STRINFOR){
-    if(STRINFOR=="forward")
+    preprocess.reads.function = NULL
+    if (STRINFOR == "INVERT")
         {
-            counttbl<- summarizeOverlaps(DB, BMAfile,
-                                        mode="IntersectionNotEmpty",
-                                        singleEnd=TRUE, ignore.strand=TRUE)
-        } else if(STRINFOR=="invert"){
-            counttbl<- summarizeOverlaps(DB, BMAfile,
-                                        mode="IntersectionNotEmpty",
-                                        singleEnd=TRUE, ignore.strand=TRUE,
-                                        preprocess.reads=invertStrand)
-        } else {
-            counttbl<- summarizeOverlaps(DB, BMAfile,
-                                        mode="IntersectionNotEmpty",
-                                        singleEnd=TRUE, ignore.strand=TRUE)
+            preprocess.reads.function = invertStrand
         }
+    counttbl= summarizeOverlaps(DB, BMAfile,
+    mode="IntersectionNotEmpty",
+    singleEnd=TRUE, ignore.strand=TRUE,
+    preprocess.reads=preprocess.reads.function)
     return(counttbl)
 }
 
 .divxdb<-function(xdb,keystr){
     x = unlist(xdb)
-    xp=x[(strand(x)==keystr),]
-    names(xp)=xp$gene_name
+    xp=x[strand(x)==keystr,]
     xpdb = split(xp, xp$gene_name)
     return(xpdb)
 }
@@ -62,6 +55,7 @@
 }
 
 REF3UTR<-function(refUTR){
+    stopifnot(ncol(refUTR) == 6)
     colnames(refUTR)=c('gene_symbol','Chrom','Strand','First','Last','cdsend')
     ##aUTR##
     refaUTR = refUTR[,c('gene_symbol','Chrom','Strand','First','Last')]
@@ -86,13 +80,13 @@ REF3UTR<-function(refUTR){
         refcUTR[which(refcUTR$Strand=='-'),]$cdsend
     refcUTR=refcUTR[,-c(4:6)]
     ref3UTR=rbind(refaUTR, refcUTR)
-    UTRdb<-makeGRangesFromDataFrame(ref3UTR, keep.extra.columns = TRUE)
-    names(UTRdb)=UTRdb$gene_name
-    UTRdb = split(UTRdb, names(UTRdb))
+    UTRdb = makeGRangesFromDataFrame(ref3UTR, keep.extra.columns = TRUE)
+    UTRdb = split(UTRdb, UTRdb$gene_name)
     return(UTRdb)
 }
 
 PASEXP_3UTR<-function(UTRdb, flS, Strandtype="NONE"){
+    stopifnot(is(UTRdb, "GRangesList"))
     for (k in seq_len(length(flS))){
         fls=flS[k]
         STRINFOR=Strandtype
@@ -101,20 +95,20 @@ PASEXP_3UTR<-function(UTRdb, flS, Strandtype="NONE"){
         UTRdf=.combine_count(UTRdb,fls,STRINFOR)
         names(UTRdf)[1]=paste0(SPNAME,"_reads")
         readscols=names(UTRdf)[1]
-        RPMcols <- paste0(SPNAME,"_RPKM")
+        RPMcols = paste0(SPNAME,"_RPKM")
         UTRdf[RPMcols]=UTRdf[readscols]/colSums(UTRdf[readscols])*1000000
         UTRdf=merge(UTRdf,acSIZE, by="gene_symbol",all.x=TRUE)
         UTRdf[RPMcols]=UTRdf[RPMcols]/UTRdf$size*1000
         aUTRdf=UTRdf[grepl("__aUTR", UTRdf$gene_symbol),]
         cUTRdf=UTRdf[grepl("__cUTR", UTRdf$gene_symbol),]
-        aUTRdf$gene_symbol <- gsub('__aUTR', '', aUTRdf$gene_symbol)
-        names(aUTRdf)<-gsub('_RPKM', '_aRPKM', names(aUTRdf))
-        names(aUTRdf)<-gsub('_reads', '_areads', names(aUTRdf))
-        cUTRdf$gene_symbol <- gsub('__cUTR', '', cUTRdf$gene_symbol)
-        names(cUTRdf)<-gsub('_RPKM', '_cRPKM', names(cUTRdf))
-        names(cUTRdf)<-gsub('_reads', '_creads', names(cUTRdf))
+        aUTRdf$gene_symbol = gsub('__aUTR', '', aUTRdf$gene_symbol)
+        names(aUTRdf) = gsub('_RPKM', '_aRPKM', names(aUTRdf))
+        names(aUTRdf) = gsub('_reads', '_areads', names(aUTRdf))
+        cUTRdf$gene_symbol = gsub('__cUTR', '', cUTRdf$gene_symbol)
+        names(cUTRdf) = gsub('_RPKM', '_cRPKM', names(cUTRdf))
+        names(cUTRdf) = gsub('_reads', '_creads', names(cUTRdf))
         dfSRSutr=merge(x = aUTRdf, y = cUTRdf, by = "gene_symbol")
-        dfSRSutr[is.na(dfSRSutr)] <- 0
+        dfSRSutr[is.na(dfSRSutr)] = 0
         dfSRSutr=dfSRSutr[,c(1,2,3,5,6)]
         dfSRSutr[,paste0(SPNAME,'_3UTR_RE')]=
             log2(dfSRSutr[,paste0(SPNAME,'_aRPKM')]/
@@ -133,7 +127,7 @@ PASEXP_3UTR<-function(UTRdb, flS, Strandtype="NONE"){
 }
 
 REFCDS<-function(txdb,IDDB){
-    CDSbygene <- cdsBy(txdb, by="gene")
+    CDSbygene = cdsBy(txdb, by="gene")
     x = unlist(CDSbygene)
     acc2sym = AnnotationDbi::select(IDDB, keys = names(x),
                                     keytype = "ENTREZID", columns = "SYMBOL")
