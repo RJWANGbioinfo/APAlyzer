@@ -8,7 +8,7 @@ The current version (v3.0) uses RNA-seq data to examine APA events in 3’
 untranslated regions (3’UTRs) and in introns. The coding regions are used 
 for gene expression calculation.
 
-![Image of logo](https://www.dropbox.com/s/pto0lndg0vty9a0/APAlyzer_logo.png?dl=0)
+![Image of logo](https://www.dropbox.com/s/pto0lndg0vty9a0/APAlyzer_logo.png)
 
 ## Authors
 * **Ruijia Wang**
