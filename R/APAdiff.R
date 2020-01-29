@@ -44,11 +44,11 @@
 .caltype<-function(tblin){
     tblin$type='NC'
     if(length(tblin[which(tblin$pv<0.05 & tblin$DAbn>0.05),]$type)>0){
-        tblin[which(tblin$pv<0.05 & tblin$DAbn>0.05),]$type='UP'
+        tblin[which(tblin$pv<0.05 & tblin$DAbn>0.05),]$type='DN'
     }
 
     if(length(tblin[which(tblin$pv<0.05 & tblin$DAbn< -0.05),]$type)>0){
-        tblin[which(tblin$pv<0.05 & tblin$DAbn< -0.05),]$type='DN'
+        tblin[which(tblin$pv<0.05 & tblin$DAbn< -0.05),]$type='UP'
     }
     return(tblin)
 }
@@ -56,10 +56,10 @@
 .caltype2<-function(tblin){
     tblin$APAreg='NC'
     if(length(tblin[which(tblin$pvalue<0.05 & tblin$RED<0),]$APAreg)>0){
-        tblin[which(tblin$pvalue<0.05 & tblin$RED<0),]$APAreg='UP'
+        tblin[which(tblin$pvalue<0.05 & tblin$RED<0),]$APAreg='DN'
     }
     if(length(tblin[which(tblin$pvalue<0.05 & tblin$RED>0),]$APAreg)>0){
-        tblin[which(tblin$pvalue<0.05 & tblin$RED>0),]$APAreg='DN'
+        tblin[which(tblin$pvalue<0.05 & tblin$RED>0),]$APAreg='UP'
     }
     return(tblin)
 }

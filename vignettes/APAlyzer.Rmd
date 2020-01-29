@@ -281,14 +281,14 @@ table(test_3UTRmuti$APAreg)
 ```
 In the replicate design, ‘RED’ is difference of averaged relative expression 
 between two groups; ‘pvalue’ is the p-value from t-test. In this case, 
-‘UP’ is defined as ‘RED’ <0 and ‘pvalue’ <0.05; while ‘DN’ is the opposite; 
+‘UP’ is defined as ‘RED’ >0 and ‘pvalue’ <0.05; while ‘DN’ is the opposite; 
 and ‘NC’ is the remaining genes.
 
 ## Significantly regulated APA in introns
 IPA comparison is similar to 3’UTR APA using `APAdiff`, except that it 
 (1) uses IPA expression as input, and (2) ‘PAS=’ needs to be defined as 
 ‘IPA’, and (3) the analysis is performed on each IPA. Note that, the direction 
-of IPA regulation is opposite to that of 3’UTR APA. This means ‘UP’ is defined 
+of IPA regulation is similar to that of 3’UTR APA. This means ‘UP’ is defined 
 as up-regulation of IPA (RED > 0); ‘DN’ is the opposite; 
 and ‘NC’ is the remaining genes.
 

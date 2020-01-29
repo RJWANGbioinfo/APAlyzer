@@ -3,3 +3,6 @@ Changes in version 0.99.1 (2019-07-14)
 Changes in version 0.99.2 (2019-08-18)
 + Revise formats to consistent with Bioconductor coding styles.
 + Added unit tests
+Changes in version 1.00.1 (2020-01-28)
++ Revise some typos in vignettes and mans.
+
