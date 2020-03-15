@@ -4,7 +4,7 @@
 statistics significance between two sample groups}
 \usage{
     APAdiff(sampleTable,mutiraw, conKET='NT',
-    trtKEY='KD',PAS='3UTR',CUTreads=0)
+    trtKEY='KD',PAS='3UTR',CUTreads=0,p_methods="fdr")
 }
 \arguments{
     \item{sampleTable}{a dataframe of sample table
@@ -15,6 +15,9 @@ statistics significance between two sample groups}
     \item{trtKEY}{the name of control in the sampletable, default is 'KD'}
     \item{PAS}{type of PAS analyzed, either '3UTR' or 'IPA', default is '3UTR'}
     \item{CUTreads}{reads cutoff used for the analysis, default is 0}
+	\item{p_methods}{p value correction method, the method can be 
+	"holm", "hochberg", "hommel", "bonferroni", "BH", "BY","fdr", "none", 
+	default is "fdr"}
     }
 \description{
     Calculate delta relative expression (RED) and
@@ -39,18 +42,18 @@ statistics significance between two sample groups}
         condition = c("NT","KD"))
     ## Analysis 3'UTR APA between KD and NT group using muti-replicates
     test_3UTRmuti=APAdiff(sampleTable1,DFUTRraw,
-    conKET='NT',trtKEY='KD',PAS='3UTR',CUTreads=0)
+    conKET='NT',trtKEY='KD',PAS='3UTR',CUTreads=0,p_methods="fdr")
 
     ## Analysis 3'UTR APA between KD and NT group without replicates
     test_3UTRsing=APAdiff(sampleTable2,DFUTRraw,
-    conKET='NT',trtKEY='KD',PAS='3UTR',CUTreads=0)
+    conKET='NT',trtKEY='KD',PAS='3UTR',CUTreads=0,p_methods="fdr")
 
     ## Analysis IPA between KD and NT group
     test_IPAmuti=APAdiff(sampleTable1,IPA_OUTraw,
-    conKET='NT',trtKEY='KD',PAS='IPA',CUTreads=0)
+    conKET='NT',trtKEY='KD',PAS='IPA',CUTreads=0,p_methods="fdr")
 
     ## Analysis IPA between KD and NT group without replicates
     test_IPAsing=APAdiff(sampleTable2,IPA_OUTraw,
-    conKET='NT',trtKEY='KD',PAS='IPA',CUTreads=0)
+    conKET='NT',trtKEY='KD',PAS='IPA',CUTreads=0,p_methods="fdr")
 
 }

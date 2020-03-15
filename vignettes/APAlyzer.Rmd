@@ -23,7 +23,7 @@ APAlyzer is a toolkit for bioinformatic analysis of alternative polyadenylation
 sequencing reads in regions demarcated by high quality polyadenylation sites 
 (PASs) annotated in the PolyA_DB database 
 (http://exon.njms.rutgers.edu/polya_db/v3/) [@Wang_2017; @Wang_2018]. 
-The current version (v3.0) uses RNA-seq data to examine APA events in 3’ 
+The current version uses RNA-seq data to examine APA events in 3’ 
 untranslated regions (3’UTRs) and in introns. The coding regions are used 
 for gene expression calculation.
 
@@ -95,7 +95,7 @@ head(dfLE,2)
 ```
 
 In additions to mouse mm9, our package has also a pre-build version 
-for human hg19 genome:
+for mouse mm10, human hg38 and human hg19 genome:
 ```{r eval=TRUE}
 extpath = system.file("extdata", "hg19_REF.RData", package="APAlyzer")
 load(extpath, verbose=TRUE)
@@ -315,7 +315,21 @@ head(test_IPAmuti,2)
 ```  
 
 # Visualization of analysis results
-APA comparison result can be plotted using either boxplots or violin plots or 
+Start from APAlyzer v1.2, we provides a new fouction called `APAVolcano` for 
+users to plot their RED results using volcano plots. In the plot, users can also 
+label the top genes using `top=` or a set of specific gene using `markergenes=`,
+for example:
+```{r eval=FALSE}
+APAVolcano(test_3UTRmuti, PAS='3UTR', Pcol = "pvalue", top=5, main='test plot')
+``` 
+```{r out.width = '75%', echo = FALSE}
+library(knitr)
+include_graphics("REDvoca.tiff")
+
+``` 
+
+
+In addtion to volcano plots, APA comparison result can be also plotted using either boxplots or violin plots or 
 CDF curves. For the previous 3’UTR APA and IPA comparison outputs, one needs 
 to first build the plotting data frame: 
 ```{r, echo = FALSE}
@@ -375,6 +389,19 @@ CDSdbraw=REFCDS(txdb,IDDB)
 ## Calculation of expression 
 ```{r eval=TRUE}
 DFGENEraw=GENEXP_CDS(CDSdbraw, flsall, Strandtype="forward")
+```
+
+# Building PAS reference using GTF file
+Start from APAlyzer v1.2, we provides a new fouction called `GTF2PAS` for users to build their 
+PAS refercence (both 3'UTR PAS and IPA) directly from GTF files, for example:
+```{r eval=FALSE}
+download.file(url='ftp://ftp.ensembl.org/pub/release-99/gtf/mus_musculus/Mus_musculus.GRCm38.99.gtf.gz',
+              destfile='Mus_musculus.GRCm38.99.gtf.gz')			  
+GTFfile="Mus_musculus.GRCm38.99.gtf.gz"	
+PASREF=GTF2PAS(GTFfile)	
+refUTRraw=PASREF$refUTRraw
+dfIPA=PASREF$dfIPA
+dfLE=PASREF$dfLE
 ```
 
 # FAQs

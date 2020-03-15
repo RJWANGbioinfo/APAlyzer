@@ -98,7 +98,8 @@
 
 }
 
-PASEXP_IPA<-function(dfIPAraw, dfLEraw, flS, Strandtype="NONE", nts=1){
+PASEXP_IPA<-function(dfIPAraw, dfLEraw, flS, 
+						Strandtype="NONE", minMQS=0,nts=1){
     for (k in seq_len(length(flS))){
         fls=flS[k]
         STRINFOR=Strandtype
@@ -140,13 +141,13 @@ PASEXP_IPA<-function(dfIPAraw, dfLEraw, flS, Strandtype="NONE", nts=1){
 
         IPAstr=.get_strand_IPA(STRINFOR)
         UPtblraw = featureCounts(fls,annot.ext=UPref,
-                                    strandSpecific=IPAstr,
+                                    strandSpecific=IPAstr,minMQS=minMQS,
                                     allowMultiOverlap=TRUE,nthreads=nts)
         DNtblraw = featureCounts(fls,annot.ext=DNref,
-                                    strandSpecific=IPAstr,
+                                    strandSpecific=IPAstr,minMQS=minMQS,
                                     allowMultiOverlap=TRUE,nthreads=nts)
         LEtblraw = featureCounts(fls,annot.ext=LEref,
-                                    strandSpecific=IPAstr,
+                                    strandSpecific=IPAstr,minMQS=minMQS,
                                     allowMultiOverlap=TRUE,nthreads=nts)
 
         UPtbl=.getIPAtbl(UPtblraw, SPNAME,UPlength,'IPA_UP')

@@ -43,12 +43,24 @@
 
 .caltype<-function(tblin){
     tblin$type='NC'
-    if(length(tblin[which(tblin$pv<0.05 & tblin$DAbn>0.05),]$type)>0){
-        tblin[which(tblin$pv<0.05 & tblin$DAbn>0.05),]$type='DN'
+    if(length(tblin[which(tblin$pv<0.05 & tblin$DAbn>0.05 & tblin$RED<0),]$type)>0){
+        tblin[which(tblin$pv<0.05 & tblin$DAbn>0.05 & tblin$RED<0),]$type='DN'
     }
 
-    if(length(tblin[which(tblin$pv<0.05 & tblin$DAbn< -0.05),]$type)>0){
-        tblin[which(tblin$pv<0.05 & tblin$DAbn< -0.05),]$type='UP'
+    if(length(tblin[which(tblin$pv<0.05 & tblin$DAbn< -0.05 & tblin$RED>0),]$type)>0){
+        tblin[which(tblin$pv<0.05 & tblin$DAbn< -0.05 & tblin$RED>0),]$type='UP'
+    }
+    return(tblin)
+}
+
+.caltype4<-function(tblin){
+    tblin$type='NC'
+    if(length(tblin[which(tblin$pv<0.05 & tblin$DAbn>0.05 & tblin$RED>0),]$type)>0){
+        tblin[which(tblin$pv<0.05 & tblin$DAbn>0.05 & tblin$RED>0),]$type='UP'
+    }
+
+    if(length(tblin[which(tblin$pv<0.05 & tblin$DAbn< -0.05 & tblin$RED<0),]$type)>0){
+        tblin[which(tblin$pv<0.05 & tblin$DAbn< -0.05 & tblin$RED<0),]$type='DN'
     }
     return(tblin)
 }
@@ -112,13 +124,13 @@
     return(sizeCUT)
 }
 
-.calt_p<-function(dfsubXXX,col9S,col10S){
+.calt_p<-function(dfsubXXX,col9S,col10S,adjust_methods){
     trtlen=length(col9S)
     conlen=length(col10S)    
     if(trtlen>1 & conlen>1){
     dfsubXXX$pvalue = apply(dfsubXXX[,c(col9S,col10S)], 
                     1, function (x) {t.test(x[seq_len(trtlen)],
-                    x[(1+trtlen):(trtlen+conlen)])$p.value})
+                    x[(1+trtlen):(trtlen+conlen)])$p.value})	
     }
 
     if(trtlen>1 & conlen==1){
@@ -132,6 +144,7 @@
                     1, function (x) {t.test(mu=x[seq_len(trtlen)],
                     x[(1+trtlen):(trtlen+conlen)])$p.value})
     }
+	dfsubXXX$p_adj	= p.adjust(dfsubXXX$pvalue, method = adjust_methods)
     return(dfsubXXX)
 
 }
@@ -180,7 +193,7 @@
     return(xxxx)
 }
 
-.final_tbl_3mutil2<-function(mutiraw, trtsamples,consamples, CUTreads){
+.final_tbl_3mutil2<-function(mutiraw, trtsamples,consamples, CUTreads,p_methods){
     col5S=paste0(trtsamples,'_areads')
     col6S=paste0(consamples,'_areads')
     col7S=paste0(trtsamples,'_creads')
@@ -193,20 +206,21 @@
     dfsubXXX$trt_RE=rowMeans(dfsubXXX[,col9S], na.rm = TRUE)
     dfsubXXX$con_RE=rowMeans(dfsubXXX[,col10S], na.rm = TRUE)
     dfsubXXX$RED=dfsubXXX$trt_RE-dfsubXXX$con_RE
-    dfsubXXX=.calt_p(dfsubXXX,col9S,col10S)    
+    dfsubXXX=.calt_p(dfsubXXX,col9S,col10S,p_methods)    
     dfsubXXX=.caltype2(dfsubXXX)
-    dfsubXXX=dfsubXXX[c('gene_symbol','RED','pvalue','APAreg')]
+    dfsubXXX=dfsubXXX[c('gene_symbol','RED','pvalue','p_adj','APAreg')]
     dfsubXXX=dfsubXXX[!duplicated(dfsubXXX),]
     return(dfsubXXX)    
 }
 
-.final_tbl_3singl<-function(mutiraw,trt,con,CUTreads){
+.final_tbl_3singl<-function(mutiraw,trt,con,CUTreads,adjust_methods){
     xxxx=.calDRUD(mutiraw, trt,con,CUTreads)
     log2col=paste0('indiRUD_',trt,'_',con)
     pcol=paste0('pv_',trt,'_',con)
     tycol=paste0('APAreg_',trt,'_',con)
-    xxxx=xxxx[,c('gene_symbol',log2col,pcol,tycol)]
-    colnames(xxxx)=c('gene_symbol','RED','pvalue','APAreg')
+	xxxx$p_adj	= p.adjust(xxxx[,pcol], method = adjust_methods)
+    xxxx=xxxx[,c('gene_symbol',log2col,pcol,'p_adj',tycol)]
+    colnames(xxxx)=c('gene_symbol','RED','pvalue','p_adj','APAreg')
     xxxx=xxxx[!duplicated(xxxx),]
     return(xxxx)
 }
@@ -254,7 +268,7 @@
     dfsub$pv = apply(dfsub[,c(col5,col6,col7,col8)], 1,
                     function(x) fisher.test(matrix(x,nrow=2))$p.value)
     dfsub$RED=dfsub[,col1]-dfsub[,col2]
-    dfsub=.caltype(dfsub)
+    dfsub=.caltype4(dfsub)
     dfsub=dfsub[c('gene_symbol','PASid','RED','pv','type')]
     colnames(dfsub)=c('gene_symbol','PASid',log2col,pcol,tycol)
     dfsub=dfsub[!duplicated(dfsub),]
@@ -288,7 +302,7 @@
     return(xxxx)
 }
 
-.final_tbl_IPAmutil2<-function(mutiraw,trtsamples,consamples,CUTreads){
+.final_tbl_IPAmutil2<-function(mutiraw,trtsamples,consamples,CUTreads,p_methods){
     col5S=paste0(trtsamples,'_IPA_UPreads')
     col6S=paste0(consamples,'_IPA_UPreads')
     col7S=paste0(trtsamples,'_LEreads')
@@ -303,42 +317,43 @@
     dfsubXXX$trt_RE=rowMeans(dfsubXXX[,col9S], na.rm = TRUE)
     dfsubXXX$con_RE=rowMeans(dfsubXXX[,col10S], na.rm = TRUE)
     dfsubXXX$RED=dfsubXXX$trt_RE-dfsubXXX$con_RE
-    dfsubXXX=.calt_p(dfsubXXX,col9S,col10S)    
+    dfsubXXX=.calt_p(dfsubXXX,col9S,col10S,p_methods)    
     dfsubXXX=.caltype3(dfsubXXX)
-    dfsubXXX=dfsubXXX[c('gene_symbol','PASid','RED','pvalue','APAreg')]
+    dfsubXXX=dfsubXXX[c('gene_symbol','PASid','RED','pvalue','p_adj','APAreg')]
     dfsubXXX=dfsubXXX[!duplicated(dfsubXXX),]
     return(dfsubXXX)        
 }
 
-.final_tbl_IPAsingl<-function(mutiraw,trt,con,CUTreads){
+.final_tbl_IPAsingl<-function(mutiraw,trt,con,CUTreads,adjust_methods){
     xxxx=.calDRUDIPA(mutiraw, trt,con,CUTreads)
     log2col=paste0('indiRUD_',trt,'_',con)
     pcol=paste0('pv_',trt,'_',con)
     tycol=paste0('APAreg_',trt,'_',con)
-    xxxx=xxxx[,c('gene_symbol','PASid',log2col,pcol,tycol)]
-    colnames(xxxx)=c('gene_symbol','PASid','RED','pvalue','APAreg')
+	xxxx$p_adj	= p.adjust(xxxx[,pcol], method = adjust_methods)
+    xxxx=xxxx[,c('gene_symbol','PASid',log2col,pcol,'p_adj',tycol)]
+    colnames(xxxx)=c('gene_symbol','PASid','RED','pvalue','p_adj','APAreg')
     xxxx=xxxx[!duplicated(xxxx),]
     return(xxxx)
 }
 
 APAdiff<-function(sampleTable,mutiraw, conKET='NT',trtKEY='KD',
-                    PAS='3UTR',CUTreads=0){
+                    PAS='3UTR',CUTreads=0,p_methods="fdr"){
     consamples=.getSPs(sampleTable,conKET)
     trtsamples=.getSPs(sampleTable,trtKEY)
     reptypeRAW=.judge_rep(trtsamples,consamples)
     if(reptypeRAW=='multi' & PAS=='3UTR'){
-        APA_diff=.final_tbl_3mutil2(mutiraw,trtsamples,consamples,CUTreads)
+        APA_diff=.final_tbl_3mutil2(mutiraw,trtsamples,consamples,CUTreads,p_methods)
     }
 
     if(reptypeRAW=='single' & PAS=='3UTR'){
-        APA_diff=.final_tbl_3singl(mutiraw,trtsamples,consamples,CUTreads)
+        APA_diff=.final_tbl_3singl(mutiraw,trtsamples,consamples,CUTreads,p_methods)
     }
 
     if(reptypeRAW=='multi' & PAS=='IPA'){
-        APA_diff=.final_tbl_IPAmutil2(mutiraw,trtsamples,consamples,CUTreads)
+        APA_diff=.final_tbl_IPAmutil2(mutiraw,trtsamples,consamples,CUTreads,p_methods)
     }
     if(reptypeRAW=='single' & PAS=='IPA'){
-        APA_diff=.final_tbl_IPAsingl(mutiraw,trtsamples,consamples,CUTreads)
+        APA_diff=.final_tbl_IPAsingl(mutiraw,trtsamples,consamples,CUTreads,p_methods)
     }
     if(reptypeRAW=='ERROR'){
     print("Sample matrix, error, please check your sample table")

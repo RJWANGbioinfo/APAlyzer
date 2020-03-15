@@ -2,7 +2,7 @@
 \alias{PASEXP_IPA}
 \title{PASEXP_IPA, calculate relative expression of IPA regions}
 \usage{
-    PASEXP_IPA(dfIPAraw, dfLEraw, flS, Strandtype="NONE", nts=1)
+    PASEXP_IPA(dfIPAraw, dfLEraw, flS, Strandtype="NONE", nts=1, minMQS=0)
 }
 \arguments{
     \item{dfIPAraw}{a dataframe containing 8 colmuns for Intronic PASs:
@@ -30,6 +30,9 @@
     \item{nts}{number of threads used for computing, 
     parameter used by \link[Rsubread:featureCounts]{featureCounts}, 
     nthread option, Default is 1}
+    \item{minMQS}{minimum mapping quality score of counted reads, 
+    parameter used by \link[Rsubread:featureCounts]{featureCounts}, 
+    minMQS option, Default is 0}	
     }
 \description{
     Map reads to IPA regions and
