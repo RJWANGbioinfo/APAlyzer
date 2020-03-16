@@ -120,14 +120,14 @@ their reference directly from gene annotation GTF files, we hope this can help
 the species which are not covered by the PolyA_DB yet:
 ```{r eval=FALSE}
 ## build Reference ranges for 3'UTR PASs in mouse
-	download.file(url='ftp://ftp.ensembl.org/pub/release-99/gtf/mus_musculus/Mus_musculus.GRCm38.99.gtf.gz',
-              destfile='Mus_musculus.GRCm38.99.gtf.gz')			  
-	GTFfile="Mus_musculus.GRCm38.99.gtf.gz"	
-    PASREFraw=GTF2PAS(GTFfile)	
-	refUTRraw=PASREFraw$refUTRraw
-    dfIPAraw=PASREFraw$dfIPA
-	dfLEraw=PASREFraw$dfLE
-	PASREF=REF4PAS(refUTRraw,dfIPAraw,dfLEraw)
+download.file(url='ftp://ftp.ensembl.org/pub/release-99/gtf/mus_musculus/Mus_musculus.GRCm38.99.gtf.gz',
+		  destfile='Mus_musculus.GRCm38.99.gtf.gz')			  
+GTFfile="Mus_musculus.GRCm38.99.gtf.gz"	
+PASREFraw=GTF2PAS(GTFfile)	
+refUTRraw=PASREFraw$refUTRraw
+dfIPAraw=PASREFraw$dfIPA
+dfLEraw=PASREFraw$dfLE
+PASREF=REF4PAS(refUTRraw,dfIPAraw,dfLEraw)
 ```
 
 
@@ -466,8 +466,3 @@ names(flsall)=dir(bamdir,".bam")
 You can try either upgrade your Bioconductor, or load the genome annotation 
 using GTF, or load the prebuild genome annotation using ‘.R.DB’ file, 
 e.g., mm9.refGene.R.DB. 
-
-
-# Acknowledgements
-We thank members of the Bin Tian lab for helpful discussions 
-and package testing.
