@@ -18,7 +18,7 @@
 }
 \author{Ruijia Wang}
 \examples{
-## build Reference ranges for 3'UTR PASs in human
+## build Reference ranges for 3'UTR PASs in mouse
 	download.file(url='ftp://ftp.ensembl.org/pub/release-99/gtf/mus_musculus/Mus_musculus.GRCm38.99.gtf.gz',
               destfile='Mus_musculus.GRCm38.99.gtf.gz')			  
 	GTFfile="Mus_musculus.GRCm38.99.gtf.gz"	

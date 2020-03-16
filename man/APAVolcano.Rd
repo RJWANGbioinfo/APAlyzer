@@ -3,7 +3,7 @@
 \title{APAVolcano, APA Volcano plotting}
 \usage{
 	APAVolcano (df, Pcol = "pvalue",PAS='3UTR',
-						top = 5, markergenes = NULL,
+						top = -1, markergenes = NULL,
 						y_cutoff = 0.05,xlab = "RED", ylab = "-Log10(P-value)",
 						PAScolor = c("gray80", "red", "blue"),
 						alpha = 0.75, plot_title = NULL,
@@ -12,7 +12,8 @@
 \arguments{
     \item{df}{a dataframe of APAdiff output}
     \item{Pcol}{p-value column used to for y-axis of volcano plot, default is 'pvalue'}
-    \item{top}{number of genes/IPA to label in the plot, default is 5}
+    \item{top}{number of genes/IPA to label in the plot, default is -1, which
+				don't lable top genes, user can set it >0, e.g., top = 5}
     \item{markergenes}{a set of genes to label in the plot}
     \item{PAS}{type of PAS analyzed, either '3UTR' or 'IPA', default is '3UTR'}
     \item{y_cutoff}{y cutoff line, default is 0.05}

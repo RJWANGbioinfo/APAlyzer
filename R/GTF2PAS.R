@@ -153,12 +153,12 @@ dfIPA=finaldf[(finaldf$LOCATION=='intron'),]
 dfIPA=dfIPA[,c('PASid','Chr','PAS','strand','GENEID','gene_name')]
 colnames(dfIPA)=c('PASid','Chrom','Pos','Strand','GENEID','gene_symbol')
 dfIPA=dfIPA[!duplicated(dfIPA),]
-return(dfIPA)
+DFIPASS=list(dfIPA,dfupSS,dfdnSS3)
+names(DFIPASS)=c('dfIPA','dfupSS','dfdnSS3')
+return(DFIPASS)
 }
 
-
-
-.GTF2LE <- function(TXDB,dfIPA)
+.GTF2LE <- function(TXDB,dfIPA,dfupSS,dfdnSS3)
 {
 ############ Hit upstream SS ##################
 dfHIT_up=merge(dfIPA,dfupSS,by=c("GENEID","gene_symbol","Chrom","Strand"))
@@ -262,8 +262,11 @@ DB <- ensDbFromGtf(gtf = GTFfile)
 EDB <- EnsDb(DB)
 finaldf=.getALLPAS(EDB,TXDB)
 refUTRraw=.GTF2refUTRraw(EDB,TXDB,finaldf)
-dfIPAsim=.GTF2IPA(EDB,TXDB,finaldf)
-dfLE=.GTF2LE(TXDB,dfIPAsim)
+dfIPAALL=.GTF2IPA(EDB,TXDB,finaldf)
+dfIPAsim=dfIPAALL$dfIPA
+dfupSS=dfIPAALL$dfupSS
+dfdnSS3=dfIPAALL$dfdnSS3
+dfLE=.GTF2LE(TXDB,dfIPAsim,dfupSS,dfdnSS3)
 PASREF=list(refUTRraw,dfIPAsim,dfLE)
 names(PASREF)=c('refUTRraw','dfIPA','dfLE')
 return(PASREF)

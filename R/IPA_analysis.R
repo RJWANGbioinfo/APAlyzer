@@ -99,7 +99,7 @@
 }
 
 PASEXP_IPA<-function(dfIPAraw, dfLEraw, flS, 
-						Strandtype="NONE", minMQS=0,nts=1){
+						Strandtype="NONE", nts=1, minMQS=0){
     for (k in seq_len(length(flS))){
         fls=flS[k]
         STRINFOR=Strandtype
