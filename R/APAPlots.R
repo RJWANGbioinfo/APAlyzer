@@ -1,4 +1,3 @@
-#### APA Volcano plotting ####
 APAVolcano <- function(df, Pcol = "pvalue",PAS='3UTR',
                         top = -1, markergenes = NULL,
                         y_cutoff = 0.05,xlab = "RED", ylab = "-Log10(P-value)",
@@ -61,5 +60,40 @@ APAVolcano <- function(df, Pcol = "pvalue",PAS='3UTR',
 
 								   
     p = p + theme(legend.position = "top")
+    return(p)
+}
+
+
+APABox <- function(df, xlab = "APAreg", ylab = "RED",
+						plot_title = NULL){
+	p<-ggplot(df, aes(x=APAreg, y=RED, fill=APAreg)) +
+	  geom_boxplot()  
+	countUP=nrow(df[df$APAreg=='UP',])
+	countDN=nrow(df[df$APAreg=='DN',])  
+	countNC=nrow(df[df$APAreg=='NC',]) 
+
+	if(countUP>0 & countDN>0){   
+	p = p+scale_fill_manual(values=c("blue", "#999999", "red"))  
+	}
+	if(countUP==0 & countDN>0){   
+	p = p+scale_fill_manual(values=c("blue", "#999999"))  
+	}
+	if(countUP>0 & countDN==0){   
+	p = p+scale_fill_manual(values=c("#999999", "red"))  
+	}
+	if(countUP==0 & countDN==0){   
+	p = p+scale_fill_manual(values=c("#999999"))  
+	}
+
+	p = p+ theme(text = element_text(colour="black",size = 14),
+					  plot.title = element_text(hjust = 0.5, size=16),
+					  axis.text = element_text(colour="gray10"))
+	p = p + geom_hline(yintercept = 0, linetype = "dotted")
+	p = p + labs(x=xlab, y=ylab, title=plot_title)
+	p = p + theme(axis.line = element_line(size=0.5, colour = "black"),
+				  panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+				  panel.border = element_blank(), panel.background = element_blank())
+	p = p + theme(legend.position = "top")	
+
     return(p)
 }

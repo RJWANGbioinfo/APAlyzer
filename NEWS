@@ -9,7 +9,8 @@ Changes in version 1.1.1 (2020-02-27)
 + Revise some typos in vignettes and mans.
 Changes in version 1.2.1 (2020-03-15)
 + Add the GTF2PAS to convert GTF to PAS reference.
-+ Add the APAVolcano to plot the APAdiff results.
++ Add the REF4PAS to generate reference region for both 3'UTR and introic PAS at the same time.
++ Add the APAVolcano and APABox to plot the APAdiff results.
 + Adjusted p-value in APAdiff
 + Allow the user to set argument minMQS to filter minimum mapping quality score of counted reads.
 + Add the build-in PAS reference for hg38 and mm10.

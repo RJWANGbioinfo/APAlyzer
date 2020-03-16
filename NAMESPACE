@@ -15,4 +15,5 @@ importFrom(SummarizedExperiment, assays)
 importFrom(stats, fisher.test)
 importFrom(stats, t.test)
 importFrom(methods, is)
-export(REF3UTR, PASEXP_3UTR,REFCDS,GENEXP_CDS,PASEXP_IPA,APAdiff)
+export(REF3UTR,PASEXP_3UTR,REFCDS,GENEXP_CDS,PASEXP_IPA,
+		APAdiff,REF4PAS,GTF2PAS,APAVolcano,APABox)

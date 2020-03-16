@@ -169,4 +169,12 @@ GENEXP_CDS<-function(CDSbygene, flS, Strandtype="NONE"){
     return(dfEXP_OUT)
 }
 
+REF4PAS<-function(refUTRraw, dfIPAraw, dfLEraw){
+	UTRdbraw=REF3UTR(refUTRraw)
+	dfIPA=dfIPAraw
+	dfLE=dfLEraw
+	PASREF=list(UTRdbraw,dfIPA,dfLE)
+	names(PASREF)=c('UTRdbraw','dfIPA','dfLE')
+	return(PASREF)
+}
 
