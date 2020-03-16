@@ -429,6 +429,3 @@ You can try either upgrade your Bioconductor, or load the genome annotation
 using GTF, or load the prebuild genome annotation using ‘.R.DB’ file, 
 e.g., mm9.refGene.R.DB. 
 
-# Session Information
-The session information records all the package versions used in 
-generation of the present document.
