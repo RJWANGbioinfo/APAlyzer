@@ -37,12 +37,16 @@ BiocManager::install('RJWANGbioinfo/APAlyzer')
 ```
 
 After installation, APAlyzer can be used by:
-```{r}
+```{r eval=FALSE}
 library(APAlyzer)
+```
+```{r, echo = FALSE}
+options(warn=-1)
+suppressMessages(library(APAlyzer))
 ```
 
 
-# Sample data 
+# Sample data and PAS references 
 
 ## RNA-seq BAM files
 The package reads BAM file(s) to obtain read coverage information in different 
@@ -85,10 +89,45 @@ head(dfLE,2)
 ```
 
 In additions to mouse mm9, our package has also a pre-build version 
-for human hg19 genome:
+for mouse mm10, human hg38 and human hg19 genome:
 ```{r eval=TRUE}
 extpath = system.file("extdata", "hg19_REF.RData", package="APAlyzer")
 load(extpath, verbose=TRUE)
+```
+
+## Building 3'UTR and intronic PAS reference region at once
+To quantify the relative expression of PAS, we will need to build the reference 
+regions for them, although this can be build separately in previous version. We
+also provide a new fouction `REF4PAS` starting from APAlyzer 1.2.1 to build 
+these regions at once:
+```{r eval=TRUE}
+refUTRraw=refUTRraw[which(refUTRraw$Chrom=='chr19'),]
+dfIPAraw=dfIPA[which(dfIPA$Chrom=='chr19'),]
+dfLEraw=dfLE[which(dfLE$Chrom=='chr19'),]	
+PASREF=REF4PAS(refUTRraw,dfIPAraw,dfLEraw)
+UTRdbraw=PASREF$refUTRraw
+dfIPA=PASREF$dfIPA
+dfLE=PASREF$dfLE	
+```
+In this case, `UTRdbraw` is the reference region used for 3'UTR APA analysis,
+while `dfIPA` and `dfLE` are needed in the intronic APA analysis.
+
+
+## Building 3'UTR PAS and IPA reference using GTF files
+Although we highly suggest user use references regions genrated from PolyA_DB. 
+Start from APAlyzer 1.2.1, we also provide a new fouction that can help users to build 
+their reference directly from gene annotation GTF files, we hope this can help
+the species which are not covered by the PolyA_DB yet:
+```{r eval=FALSE}
+## build Reference ranges for 3'UTR PASs in mouse
+	download.file(url='ftp://ftp.ensembl.org/pub/release-99/gtf/mus_musculus/Mus_musculus.GRCm38.99.gtf.gz',
+              destfile='Mus_musculus.GRCm38.99.gtf.gz')			  
+	GTFfile="Mus_musculus.GRCm38.99.gtf.gz"	
+    PASREFraw=GTF2PAS(GTFfile)	
+	refUTRraw=PASREFraw$refUTRraw
+    dfIPAraw=PASREFraw$dfIPA
+	dfLEraw=PASREFraw$dfLE
+	PASREF=REF4PAS(refUTRraw,dfIPAraw,dfLEraw)
 ```
 
 
@@ -247,12 +286,13 @@ table(test_3UTRsing$APAreg)
 ```
 The output contains 4 columns: ‘gene symbol’ describes gene information; 
 ‘RED’ is relative expression difference between two groups; ‘pvalue’ is 
-statistical significance based on the Fisher’s exact test; and ‘APAreg’ 
-is 3’UTR APA regulation pattern in the gene. We define 3 types in ‘APAreg’, 
-‘UP’ means aUTR abundance in the treatment group (‘KD’ in this case) is at 
-least 5% higher than that in control (‘NT’ in this case), and ‘pvalue’<0.05; 
-‘DN’ means aUTR abundance is 5% lower in treatment than that in control and  
-p-value<0.05; ‘NC’ are the remaining genes. With respect to 3’UTR size changes, 
+statistical significance based on the Fisher’s exact test; ‘p_adj’ is FDR 
+adjusted  pvalue and ‘APAreg’ is 3’UTR APA regulation pattern in the gene. 
+We define 3 types in ‘APAreg’, ‘UP’ means aUTR abundance in the treatment group
+ (‘KD’ in this case) is at least 5% higher than that in control 
+ (‘NT’ in this case), and ‘pvalue’<0.05; ‘DN’ means aUTR abundance is 5% lower 
+ in treatment than that in control and p-value<0.05; ‘NC’ are the remaining 
+ genes. With respect to 3’UTR size changes, 
 ‘UP’ means 3’UTR shortening, and ‘DN’ 3’UTR lengthening.
 
 For the replicate design, we use t-test for significance analysis. However, 
@@ -305,7 +345,32 @@ head(test_IPAmuti,2)
 ```  
 
 # Visualization of analysis results
-APA comparison result can be plotted using either boxplots or violin plots or 
+Start from APAlyzer 1.2.1, we provides two new fouction called `APAVolcano`
+and `APABox` for users to plot their RED results using volcano plot and box plot. 
+In the volcano plot, users can also label the top genes using 
+`top=` or a set of specific gene using `markergenes=`, for example:
+```{r eval=FALSE}
+APAVolcano(test_3UTRsing, PAS='3UTR', Pcol = "pvalue", top=5, main='3UTR APA')
+``` 
+```{r out.width = '75%', echo = FALSE}
+library(knitr)
+include_graphics("REDvoca.tiff")
+
+```
+
+In the box plot, RED is ploted on 'UP', 'DN', and 'NC' genes:
+```{r eval=FALSE}
+APABox(test_3UTRsing, xlab = "APAreg", ylab = "RED", plot_title = NULL)
+``` 
+```{r out.width = '75%', echo = FALSE}
+library(knitr)
+include_graphics("REDbox.tiff")
+
+``` 
+
+
+In addtion to volcano and box plots, APA comparison result can be also plotted 
+using either boxplots or violin plots or 
 CDF curves. For the previous 3’UTR APA and IPA comparison outputs, one needs 
 to first build the plotting data frame: 
 ```{r, echo = FALSE}
@@ -367,6 +432,19 @@ CDSdbraw=REFCDS(txdb,IDDB)
 DFGENEraw=GENEXP_CDS(CDSdbraw, flsall, Strandtype="forward")
 ```
 
+# Building PAS reference using GTF file
+Start from APAlyzer v1.2, we provides a new fouction called `GTF2PAS` for users to build their 
+PAS refercence (both 3'UTR PAS and IPA) directly from GTF files, for example:
+```{r eval=FALSE}
+download.file(url='ftp://ftp.ensembl.org/pub/release-99/gtf/mus_musculus/Mus_musculus.GRCm38.99.gtf.gz',
+              destfile='Mus_musculus.GRCm38.99.gtf.gz')			  
+GTFfile="Mus_musculus.GRCm38.99.gtf.gz"	
+PASREF=GTF2PAS(GTFfile)	
+refUTRraw=PASREF$refUTRraw
+dfIPA=PASREF$dfIPA
+dfLE=PASREF$dfLE
+```
+
 # FAQs
 
 **How to generate a BAM file list for analysis?**
@@ -389,13 +467,6 @@ You can try either upgrade your Bioconductor, or load the genome annotation
 using GTF, or load the prebuild genome annotation using ‘.R.DB’ file, 
 e.g., mm9.refGene.R.DB. 
 
-# Session Information
-The session information records all the package versions used in 
-generation of the present document.
-
-```{r sessionInfo}
-sessionInfo()
-```
 
 # Acknowledgements
 We thank members of the Bin Tian lab for helpful discussions 
