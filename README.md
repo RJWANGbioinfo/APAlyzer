@@ -144,12 +144,7 @@ UTRdbraw=REF3UTR(refUTRraw)
 ```
 The `REF3UTR` function returns a genomic range containing aUTR(pPAS to dPAS) 
 and cUTR(cdsend to pPAS) regions for each gene:
-```{r, echo = FALSE}
-extpath = system.file("extdata", "mm9_REF.RData", package="APAlyzer")
-load(extpath)
-refUTRraw=refUTRraw[which(refUTRraw$Chrom=='chr19'),]
-UTRdbraw=REF3UTR(refUTRraw)
-```
+
 ```{r}
 head(UTRdbraw,2)
 ```
@@ -157,16 +152,7 @@ head(UTRdbraw,2)
 ## Calculation of relative expression 
 Once cUTR and aUTR regions are defined, the RE of 3’UTR APA of each gene 
 can be calculated by `PASEXP_3UTR`:
-```{r, echo = FALSE}
-options(warn=-1)
-suppressMessages(library("TBX20BamSubset"))
-suppressMessages(library("Rsamtools"))
-extpath = system.file("extdata", "mm9_REF.RData", package="APAlyzer")
-load(extpath)
-flsall <- getBamFileList()
-refUTRraw=refUTRraw[which(refUTRraw$Chrom=='chr19'),]
-UTRdbraw=REF3UTR(refUTRraw)
-```
+
 
 ```{r eval=TRUE}
 DFUTRraw=PASEXP_3UTR(UTRdbraw, flsall, Strandtype="forward")
@@ -218,10 +204,6 @@ The output data frame contains read count and read density IPA upstream (a),
 IPA downstream (b) and 3’-most exon region (c). 
 The RE of IPA is calculated as log2((a - b)/c).
 
-```{r, echo = FALSE}
-extpath = system.file("extdata", "mm9_TBX20.APAout.RData", package="APAlyzer")
-load(extpath)
-```
 
 ```{r}
 head(IPA_OUTraw,2)
@@ -235,11 +217,7 @@ In this analysis, there are two types of experimental design:
 1) without replicates; 2) with replicates. 
 A sample table will be generated according to the design:
 
-```{r, echo = FALSE}
-options(warn=-1)
-extpath = system.file("extdata", "mm9_TBX20.APAout.RData", package="APAlyzer")
-load(extpath)
-```
+
 
 ```{r eval=TRUE}
 # Build the sample table with replicates
@@ -352,34 +330,18 @@ In the volcano plot, users can also label the top genes using
 ```{r eval=FALSE}
 APAVolcano(test_3UTRsing, PAS='3UTR', Pcol = "pvalue", top=5, main='3UTR APA')
 ``` 
-```{r out.width = '75%', echo = FALSE}
-library(knitr)
-include_graphics("REDvoca.tiff")
 
-```
 
 In the box plot, RED is ploted on 'UP', 'DN', and 'NC' genes:
 ```{r eval=FALSE}
 APABox(test_3UTRsing, xlab = "APAreg", ylab = "RED", plot_title = NULL)
 ``` 
-```{r out.width = '75%', echo = FALSE}
-library(knitr)
-include_graphics("REDbox.tiff")
-
-``` 
-
 
 In addtion to volcano and box plots, APA comparison result can be also plotted 
 using either boxplots or violin plots or 
 CDF curves. For the previous 3’UTR APA and IPA comparison outputs, one needs 
 to first build the plotting data frame: 
-```{r, echo = FALSE}
-options(warn=-1)
-extpath = system.file("extdata", 
-                        "mm9_TBX20.APAdiff_OUT.RData", 
-                        package="APAlyzer")
-load(extpath)
-```
+
 ```{r eval=TRUE}
 test_3UTRmuti$APA="3'UTR"
 test_IPAmuti$APA="IPA"
