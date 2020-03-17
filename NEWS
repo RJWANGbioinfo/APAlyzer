@@ -5,9 +5,9 @@ Changes in version 0.99.2 (2019-08-18)
 + Added unit tests
 Changes in version 1.0.1 (2020-01-28)
 + Revise some typos in vignettes and mans.
-Changes in version 1.1.1 (2020-02-27)
+Changes in version 1.1.0 (2020-02-27)
 + Revise some typos in vignettes and mans.
-Changes in version 1.2.1 (2020-03-15)
+Changes in version 1.1.1 (2020-03-15)
 + Add the GTF2PAS to convert GTF to PAS reference.
 + Add the REF4PAS to generate reference region for both 3'UTR and introic PAS at the same time.
 + Add the APAVolcano and APABox to plot the APAdiff results.
@@ -17,3 +17,4 @@ Changes in version 1.2.1 (2020-03-15)
 + Add the build-in PAS reference for all PASs including conserved and non-conserved.
 + Update vignettes and mans.
 + PAS reference regions are now move to a separate repo.
+
