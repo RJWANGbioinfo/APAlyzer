@@ -40,10 +40,7 @@ After installation, APAlyzer can be used by:
 ```{r eval=FALSE}
 library(APAlyzer)
 ```
-```{r, echo = FALSE}
-options(warn=-1)
-suppressMessages(library(APAlyzer))
-```
+
 
 
 # Sample data and PAS references 
@@ -67,8 +64,10 @@ PAS references in the genome (both 3’UTRs and introns) are required by our
 package. We have pre-built a reference file for the mouse genome (mm9), 
 which can be loaded from `extdata`:
 ```{r eval=TRUE}
-extpath = system.file("extdata", "mm9_REF.RData", package="APAlyzer")
-load(extpath, verbose=TRUE)
+library(repmis)
+URL="https://github.com/RJWANGbioinfo/PAS_reference_RData/blob/master/"
+file="mm9_REF.RData"
+source_data(paste0(URL,file,"?raw=True"))
 ```
 This `extdata` covers 3’UTR APA regions (refUTRraw), IPA regions (dfIPA), 
 and 3’-most exon regions (dfLE). The `refUTRraw` is a data frame containing 
@@ -91,9 +90,12 @@ head(dfLE,2)
 In additions to mouse mm9, our package has also a pre-build version 
 for mouse mm10, human hg38 and human hg19 genome:
 ```{r eval=TRUE}
-extpath = system.file("extdata", "hg19_REF.RData", package="APAlyzer")
-load(extpath, verbose=TRUE)
+URL="https://github.com/RJWANGbioinfo/PAS_reference_RData/blob/master/"
+file="hg19_REF.RData"
+source_data(paste0(URL,file,"?raw=True"))
 ```
+More pre-build refercence can be found at https://github.com/RJWANGbioinfo/PAS_reference_RData
+
 
 ## Building 3'UTR and intronic PAS reference region at once
 To quantify the relative expression of PAS, we will need to build the reference 
@@ -177,14 +179,16 @@ pre-built in the package:
 
 ```{r eval=TRUE}
 #mouse(mm9):
-extpath = system.file("extdata", "mm9_REF.RData", package="APAlyzer")
-load(extpath)
+URL="https://github.com/RJWANGbioinfo/PAS_reference_RData/blob/master/"
+file="mm9_REF.RData"
+source_data(paste0(URL,file,"?raw=True"))
 ```
 
 ```{r eval=TRUE}
 #human(hg19):
-extpath = system.file("extdata", "hg19_REF.RData", package="APAlyzer")
-load(extpath)
+URL="https://github.com/RJWANGbioinfo/PAS_reference_RData/blob/master/"
+file="hg19_REF.RData"
+source_data(paste0(URL,file,"?raw=True"))
 ```
 
 ## Calculation of relative expression 
@@ -330,12 +334,22 @@ In the volcano plot, users can also label the top genes using
 ```{r eval=FALSE}
 APAVolcano(test_3UTRsing, PAS='3UTR', Pcol = "pvalue", top=5, main='3UTR APA')
 ``` 
+```{r out.width = '75%', echo = FALSE}
+library(knitr)
+include_graphics("REDvoca.png")
 
+```
 
 In the box plot, RED is ploted on 'UP', 'DN', and 'NC' genes:
 ```{r eval=FALSE}
 APABox(test_3UTRsing, xlab = "APAreg", ylab = "RED", plot_title = NULL)
 ``` 
+```{r out.width = '75%', echo = FALSE}
+library(knitr)
+include_graphics("REDbox.png")
+
+``` 
+
 
 In addtion to volcano and box plots, APA comparison result can be also plotted 
 using either boxplots or violin plots or 
