@@ -1,4 +1,4 @@
-.getALLPAS <- function(EDB,TXDB)
+.getALLPAS<-function(EDB,TXDB)
 {
 ############### all PAS ##################
 TX=transcripts(EDB, columns=c("tx_id", "gene_id",'gene_name'))
@@ -40,7 +40,7 @@ return(finaldf)
 }
 
 
-.GTF2refUTRraw <- function(EDB,TXDB,finaldf)
+.GTF2refUTRraw<-function(EDB,TXDB,finaldf)
 {
 ##### 3UTR PAS ######
 df3UTR=finaldf[which(finaldf$LOCATION=='threeUTR'), ]
@@ -111,7 +111,7 @@ return(refUTRraw)
 
 
 
-.GTF2IPA <- function(EDB,TXDB,finaldf)
+.GTF2IPA<-function(EDB,TXDB,finaldf)
 {
 ############ intron and SS ################
 introns = intronsByTranscript(TXDB, use.names=TRUE)
@@ -158,10 +158,13 @@ names(DFIPASS)=c('dfIPA','dfupSS','dfdnSS3')
 return(DFIPASS)
 }
 
-.GTF2LE <- function(TXDB,dfIPA,dfupSS,dfdnSS3)
+.GTF2LE<-function(TXDB,dfIPAXXX,dfupSSXXX,dfdnSS3XXX)
 {
+dfIPAXXX=as.data.frame(dfIPAXXX)
+dfupSSXXX=as.data.frame(dfupSSXXX)
+dfdnSS3XXX=as.data.frame(dfdnSS3XXX)
 ############ Hit upstream SS ##################
-dfHIT_up=merge(dfIPA,dfupSS,by=c("GENEID","gene_symbol","Chrom","Strand"))
+dfHIT_up=merge(dfIPAXXX,dfupSSXXX,by=c("GENEID","gene_symbol","Chrom","Strand"))
 dfHIT_up$dis=dfHIT_up$Pos-dfHIT_up$upstreamSS
 dfHIT_up[which(dfHIT_up$Strand=='-'),]$dis=dfHIT_up[which(dfHIT_up$Strand=='-'),]$upstreamSS-dfHIT_up[which(dfHIT_up$Strand=='-'),]$Pos
 dfHIT_up$HITID=paste0(dfHIT_up$GENEID,dfHIT_up$gene_symbol,dfHIT_up$PASid)
@@ -173,7 +176,7 @@ dfHIT_up=dfHIT_up[,c("GENEID","gene_symbol","Chrom","Strand","PASid","Pos","upst
 colnames(dfHIT_up)=c("GENEID","gene_symbol","Chrom","Strand","PASid","Pos","upstreamSS","type","upstream_dis")
 
 ############ Hit downstream SS ##################
-dfHIT_dn=merge(dfIPA,dfdnSS3,by=c("GENEID","gene_symbol","Chrom","Strand"))
+dfHIT_dn=merge(dfIPAXXX,dfdnSS3XXX,by=c("GENEID","gene_symbol","Chrom","Strand"))
 dfHIT_dn$dis=dfHIT_dn$downstreamSS-dfHIT_dn$Pos
 dfHIT_dn[which(dfHIT_dn$Strand=='-'),]$dis=dfHIT_dn[which(dfHIT_dn$Strand=='-'),]$Pos-dfHIT_dn[which(dfHIT_dn$Strand=='-'),]$downstreamSS
 dfHIT_dn$HITID=paste0(dfHIT_dn$GENEID,dfHIT_dn$gene_symbol,dfHIT_dn$PASid)
@@ -255,7 +258,7 @@ colnames(dfLE)=c('gene_symbol','Chrom','Strand','LEstart','TES')
 return(dfLE)
 }
 
-GTF2PAS <- function(GTFfile)
+GTF2PAS<-function(GTFfile)
 {
 TXDB<-makeTxDbFromGFF(GTFfile)
 DB <- ensDbFromGtf(gtf = GTFfile)
@@ -263,11 +266,11 @@ EDB <- EnsDb(DB)
 finaldf=.getALLPAS(EDB,TXDB)
 refUTRraw=.GTF2refUTRraw(EDB,TXDB,finaldf)
 dfIPAALL=.GTF2IPA(EDB,TXDB,finaldf)
-dfIPAsim=dfIPAALL$dfIPA
-dfupSS=dfIPAALL$dfupSS
-dfdnSS3=dfIPAALL$dfdnSS3
-dfLE=.GTF2LE(TXDB,dfIPAsim,dfupSS,dfdnSS3)
-PASREF=list(refUTRraw,dfIPAsim,dfLE)
+dfIPAXXX=dfIPAALL$dfIPA
+dfupSSXXX=dfIPAALL$dfupSS
+dfdnSS3XXX=dfIPAALL$dfdnSS3
+dfLE=.GTF2LE(TXDB,dfIPAXXX,dfupSSXXX,dfdnSS3XXX)
+PASREF=list(refUTRraw,dfIPAXXX,dfLE)
 names(PASREF)=c('refUTRraw','dfIPA','dfLE')
 return(PASREF)
 }

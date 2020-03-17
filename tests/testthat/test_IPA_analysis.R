@@ -1,6 +1,7 @@
 test_that("IPA_analysis works properly", {
-    extpath = system.file("extdata", "mm9_REF.RData", package="APAlyzer")
-	load(extpath)
+	URL="https://github.com/RJWANGbioinfo/PAS_reference_RData/blob/master/"
+	file="mm9_REF.RData"
+	source_data(paste0(URL,file,"?raw=True"))
 	dfIPA=dfIPA[which(dfIPA$Chrom=='chr19'),]
 	dfLE=dfLE[which(dfLE$Chrom=='chr19'),]	
 	library("TBX20BamSubset")

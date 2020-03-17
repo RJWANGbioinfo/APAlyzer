@@ -41,8 +41,10 @@
 \author{Ruijia Wang}
 \examples{
 ## build Reference ranges for 3'UTR and Intronic PAS in mouse (mm9)
-    extpath = system.file("extdata", "mm9_REF.RData", package="APAlyzer")
-    load(extpath)
+	library(repmis)
+	URL="https://github.com/RJWANGbioinfo/PAS_reference_RData/blob/master/"
+	file="mm9_REF.RData"
+	source_data(paste0(URL,file,"?raw=True"))
     refUTRraw=refUTRraw[which(refUTRraw$Chrom=='chr19'),]
 	dfIPAraw=dfIPA[which(dfIPA$Chrom=='chr19'),]
 	dfLEraw=dfLE[which(dfLE$Chrom=='chr19'),]	

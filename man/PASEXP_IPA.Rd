@@ -51,8 +51,10 @@
     library("TBX20BamSubset")
     library("Rsamtools")
     library("GenomicAlignments")
+	library("repmis")
     flsall = getBamFileList()
-    extpath = system.file("extdata", "mm9_REF.RData", package="APAlyzer")
-    load(extpath)
+	URL="https://github.com/RJWANGbioinfo/PAS_reference_RData/blob/master/"
+	file="mm9_REF.RData"
+	source_data(paste0(URL,file,"?raw=True"))
     IPA_OUTraw=PASEXP_IPA(dfIPA, dfLE, flsall, Strandtype="forward", nts=1)
 }

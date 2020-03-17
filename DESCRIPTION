@@ -11,7 +11,7 @@ biocViews: Sequencing, RNASeq, DifferentialExpression, GeneExpression,
         GeneRegulation, Annotation, DataImport, Software
 Imports: GenomicRanges, GenomicFeatures, GenomicAlignments, DESeq, ggrepel,
         SummarizedExperiment, Rsubread, stats, ggplot2, methods, rtracklayer,
-		ensembldb, VariantAnnotation, dplyr, tidyr
+		ensembldb, VariantAnnotation, dplyr, tidyr, repmis
 Suggests: knitr, rmarkdown, BiocStyle, org.Mm.eg.db, AnnotationDbi, TBX20BamSubset, Rsamtools, testthat
 URL: https://github.com/RJWANGbioinfo/APAlyzer/
 BugReports: https://github.com/RJWANGbioinfo/APAlyzer/issues

@@ -1,6 +1,7 @@
 test_that("APAlyzer works properly", {
-    extpath = system.file("extdata", "mm9_REF.RData", package="APAlyzer")
-	load(extpath)
+	URL="https://github.com/RJWANGbioinfo/PAS_reference_RData/blob/master/"
+	file="mm9_REF.RData"
+	source_data(paste0(URL,file,"?raw=True"))
 	refUTRraw=refUTRraw[which(refUTRraw$Chrom=='chr19'),]
 	UTRdbraw=REF3UTR(refUTRraw)
 	expect_true(unique(as.data.frame(UTRdbraw)$seqname)=='chr19')	

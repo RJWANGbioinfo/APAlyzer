@@ -18,7 +18,7 @@
 }
 \author{Ruijia Wang}
 \examples{
-## build Reference ranges for CDS in human coding genes
+## build Reference ranges for CDS in mouse coding genes
     library("GenomicFeatures")
     library("org.Mm.eg.db")
     extpath = system.file("extdata", "mm9.chr19.refGene.R.DB", package="APAlyzer")
