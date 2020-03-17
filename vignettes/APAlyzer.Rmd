@@ -113,7 +113,7 @@ More pre-build refercence can be found at https://github.com/RJWANGbioinfo/PAS_r
 ## Building 3'UTR and intronic PAS reference region at once
 To quantify the relative expression of PAS, we will need to build the reference 
 regions for them, although this can be build separately in previous version. We
-also provide a new fouction `REF4PAS` starting from APAlyzer 1.2.1 to build 
+also provide a new fouction `REF4PAS` starting from APAlyzer 1.1.1 to build 
 these regions at once:
 ```{r eval=TRUE}
 refUTRraw=refUTRraw[which(refUTRraw$Chrom=='chr19'),]
@@ -130,7 +130,7 @@ while `dfIPA` and `dfLE` are needed in the intronic APA analysis.
 
 ## Building 3'UTR PAS and IPA reference using GTF files
 Although we highly suggest user use references regions genrated from PolyA_DB. 
-Start from APAlyzer 1.2.1, we also provide a new fouction that can help users to build 
+Start from APAlyzer 1.1.1, we also provide a new fouction that can help users to build 
 their reference directly from gene annotation GTF files, we hope this can help
 the species which are not covered by the PolyA_DB yet:
 ```{r eval=FALSE}
@@ -364,7 +364,7 @@ head(test_IPAmuti,2)
 ```  
 
 # Visualization of analysis results
-Start from APAlyzer 1.2.1, we provides two new fouction called `APAVolcano`
+Start from APAlyzer 1.1.1, we provides two new fouction called `APAVolcano`
 and `APABox` for users to plot their RED results using volcano plot and box plot. 
 In the volcano plot, users can also label the top genes using 
 `top=` or a set of specific gene using `markergenes=`, for example:
