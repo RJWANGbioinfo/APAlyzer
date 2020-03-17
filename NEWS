@@ -17,3 +17,4 @@ Changes in version 1.2.1 (2020-03-15)
 + Add the build-in PAS reference for all PASs including conserved and non-conserved.
 + Update vignettes and mans.
 + PAS reference regions are now move to a separate repo.
+
