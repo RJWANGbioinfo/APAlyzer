@@ -446,15 +446,15 @@ IPA_OUT=PASEXP_IPA(dfIPA, dfLE, flsall, Strandtype="invert", nts=1)
 ```{r eval=FALSE}
 ############# 3utr APA #################
 sampleTable = data.frame(samplename = c('Heart_rep1',
-										'Heart_rep2',
-										'Heart_rep3',
-										'Heart_rep4',
-										'Testis_rep1',
-										'Testis_rep2',
-										'Testis_rep3',
-										'Testis_rep4'),
-						condition = c(rep("Heart",4),
-									rep("Testis",4)))
+'Heart_rep2',
+'Heart_rep3',
+'Heart_rep4',
+'Testis_rep1',
+'Testis_rep2',
+'Testis_rep3',
+'Testis_rep4'),
+condition = c(rep("Heart",4),
+rep("Testis",4)))
 						
 test_3UTRAPA=APAdiff(sampleTable,UTR_APA_OUT, 
                         conKET='Heart',
