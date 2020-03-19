@@ -94,20 +94,21 @@ URL="https://github.com/RJWANGbioinfo/PAS_reference_RData/blob/master/"
 file="hg19_REF.RData"
 source_data(paste0(URL,file,"?raw=True"))
 ```
-More pre-build refercence can be found at https://github.com/RJWANGbioinfo/PAS_reference_RData
+More pre-build refercence can be found at the reference and testing data repo:
+https://github.com/RJWANGbioinfo/PAS_reference_RData_and_testing_data
 
 
 ## Building 3'UTR and intronic PAS reference region at once
 To quantify the relative expression of PAS, we will need to build the reference 
 regions for them, although this can be build separately in previous version. We
-also provide a new fouction `REF4PAS` starting from APAlyzer 1.1.1 to build 
+also provide a new fouction `REF4PAS` starting from APAlyzer 1.2.1 to build 
 these regions at once:
 ```{r eval=TRUE}
 refUTRraw=refUTRraw[which(refUTRraw$Chrom=='chr19'),]
 dfIPAraw=dfIPA[which(dfIPA$Chrom=='chr19'),]
 dfLEraw=dfLE[which(dfLE$Chrom=='chr19'),]	
 PASREF=REF4PAS(refUTRraw,dfIPAraw,dfLEraw)
-UTRdbraw=PASREF$refUTRraw
+UTRdbraw=PASREF$UTRdbraw
 dfIPA=PASREF$dfIPA
 dfLE=PASREF$dfLE	
 ```
@@ -117,7 +118,7 @@ while `dfIPA` and `dfLE` are needed in the intronic APA analysis.
 
 ## Building 3'UTR PAS and IPA reference using GTF files
 Although we highly suggest user use references regions genrated from PolyA_DB. 
-Start from APAlyzer 1.1.1, we also provide a new fouction that can help users to build 
+Start from APAlyzer 1.2.1, we also provide a new fouction that can help users to build 
 their reference directly from gene annotation GTF files, we hope this can help
 the species which are not covered by the PolyA_DB yet:
 ```{r eval=FALSE}
@@ -125,7 +126,7 @@ the species which are not covered by the PolyA_DB yet:
 download.file(url='ftp://ftp.ensembl.org/pub/release-99/gtf/mus_musculus/Mus_musculus.GRCm38.99.gtf.gz',
 		  destfile='Mus_musculus.GRCm38.99.gtf.gz')			  
 GTFfile="Mus_musculus.GRCm38.99.gtf.gz"	
-PASREFraw=GTF2PAS(GTFfile)	
+PASREFraw=PAS2GEF(GTFfile)	
 refUTRraw=PASREFraw$refUTRraw
 dfIPAraw=PASREFraw$dfIPA
 dfLEraw=PASREFraw$dfLE
@@ -154,7 +155,6 @@ head(UTRdbraw,2)
 ## Calculation of relative expression 
 Once cUTR and aUTR regions are defined, the RE of 3’UTR APA of each gene 
 can be calculated by `PASEXP_3UTR`:
-
 
 ```{r eval=TRUE}
 DFUTRraw=PASEXP_3UTR(UTRdbraw, flsall, Strandtype="forward")
@@ -209,6 +209,7 @@ IPA downstream (b) and 3’-most exon region (c).
 The RE of IPA is calculated as log2((a - b)/c).
 
 
+
 ```{r}
 head(IPA_OUTraw,2)
 ```
@@ -220,7 +221,6 @@ one can compare APA regulation difference between two different groups.
 In this analysis, there are two types of experimental design: 
 1) without replicates; 2) with replicates. 
 A sample table will be generated according to the design:
-
 
 
 ```{r eval=TRUE}
@@ -327,27 +327,18 @@ head(test_IPAmuti,2)
 ```  
 
 # Visualization of analysis results
-Start from APAlyzer 1.1.1, we provides two new fouction called `APAVolcano`
+Start from APAlyzer 1.2.1, we provides two new fouction called `APAVolcano`
 and `APABox` for users to plot their RED results using volcano plot and box plot. 
 In the volcano plot, users can also label the top genes using 
 `top=` or a set of specific gene using `markergenes=`, for example:
 ```{r eval=FALSE}
 APAVolcano(test_3UTRsing, PAS='3UTR', Pcol = "pvalue", top=5, main='3UTR APA')
 ``` 
-```{r out.width = '75%', echo = FALSE}
-library(knitr)
-include_graphics("REDvoca.png")
 
-```
 
 In the box plot, RED is ploted on 'UP', 'DN', and 'NC' genes:
 ```{r eval=FALSE}
 APABox(test_3UTRsing, xlab = "APAreg", ylab = "RED", plot_title = NULL)
-``` 
-```{r out.width = '75%', echo = FALSE}
-library(knitr)
-include_graphics("REDbox.png")
-
 ``` 
 
 
@@ -408,18 +399,94 @@ CDSdbraw=REFCDS(txdb,IDDB)
 DFGENEraw=GENEXP_CDS(CDSdbraw, flsall, Strandtype="forward")
 ```
 
-# Building PAS reference using GTF file
-Start from APAlyzer v1.2, we provides a new fouction called `GTF2PAS` for users to build their 
-PAS refercence (both 3'UTR PAS and IPA) directly from GTF files, for example:
+# Complete Analysis Example: APA analysis in mouse testis versus heart
+## About this dataset
+To provide a complete tutorial of APA analysis using our package, we have now 
+prepared a testing dataset through down sampling of mouse RNA-Seq data in heart 
+(GSM900193) and testis (GSM900199):
+
+| Sample ID | SRRID     | Sample Name | Down sampling reads|
+|-----------|:---------:|------------:|----------:|
+| GSM900199 | SRR453175 | Heart_Rep1  | 5 Million |
+| GSM900199 | SRR453174 | Heart_Rep2  | 5 Million |
+| GSM900199 | SRR453173 | Heart_Rep3  | 5 Million |
+| GSM900199 | SRR453172 | Heart_Rep4  | 5 Million |
+| GSM900193 | SRR453143 | Testis_rep1 | 5 Million |
+| GSM900193 | SRR453142 | Testis_rep2 | 5 Million |
+| GSM900193 | SRR453141 | Testis_rep3 | 5 Million |
+| GSM900193 | SRR453140 | Testis_rep4 | 5 Million |
+
+## Download the bam files
 ```{r eval=FALSE}
-download.file(url='ftp://ftp.ensembl.org/pub/release-99/gtf/mus_musculus/Mus_musculus.GRCm38.99.gtf.gz',
-              destfile='Mus_musculus.GRCm38.99.gtf.gz')			  
-GTFfile="Mus_musculus.GRCm38.99.gtf.gz"	
-PASREF=GTF2PAS(GTFfile)	
-refUTRraw=PASREF$refUTRraw
+download_testbam()
+flsall <- dir(getwd(),".bam")
+flsall<-paste0(getwd(),'/',flsall)
+names(flsall)<-gsub('.bam','',dir(getwd(),".bam"))
+```
+
+## Build the PAS reference regions
+```{r eval=FALSE}
+library(repmis)
+URL="https://github.com/RJWANGbioinfo/PAS_reference_RData/blob/master/"
+file="mm9_REF.RData"
+source_data(paste0(URL,file,"?raw=True"))
+PASREF=REF4PAS(refUTRraw,dfIPA,dfLE)
+UTRdbraw=PASREF$UTRdbraw
 dfIPA=PASREF$dfIPA
 dfLE=PASREF$dfLE
 ```
+
+## Calculation of relative expression of 3'UTR APA and IPA
+```{r eval=FALSE}
+UTR_APA_OUT=PASEXP_3UTR(UTRdbraw, flsall, Strandtype="invert")
+IPA_OUT=PASEXP_IPA(dfIPA, dfLE, flsall, Strandtype="invert", nts=1)
+```
+
+## Significantly regulated APA in 3’UTRs
+```{r eval=FALSE}
+############# 3utr APA #################
+sampleTable = data.frame(samplename = c('Heart_rep1',
+										'Heart_rep2',
+										'Heart_rep3',
+										'Heart_rep4',
+										'Testis_rep1',
+										'Testis_rep2',
+										'Testis_rep3',
+										'Testis_rep4'),
+						condition = c(rep("Heart",4),
+									rep("Testis",4)))
+						
+test_3UTRAPA=APAdiff(sampleTable,UTR_APA_OUT, 
+                        conKET='Heart',
+                        trtKEY='Testis',
+                        PAS='3UTR',
+                        CUTreads=5)
+						
+```	
+
+```{r eval=TRUE}					
+table(test_3UTRAPA$APAreg)						
+APAVolcano(test_3UTRAPA, PAS='3UTR', Pcol = "pvalue", plot_title='3UTR APA')
+APABox(test_3UTRAPA, xlab = "APAreg", ylab = "RED", plot_title = NULL)
+```
+
+## Significantly regulated APA in Intron
+```{r eval=FALSE}
+############# IPA #################
+test_IPA=APAdiff(sampleTable,
+                        IPA_OUT, 
+                        conKET='Heart',
+                        trtKEY='Testis',
+                        PAS='IPA',
+                        CUTreads=5)
+```	
+
+```{r eval=TRUE}					
+table(test_IPA$APAreg)	
+APAVolcano(test_IPA, PAS='IPA', Pcol = "pvalue", plot_title='IPA')
+APABox(test_IPA, xlab = "APAreg", ylab = "RED", plot_title = NULL)
+```
+
 
 # FAQs
 
@@ -442,4 +509,5 @@ names(flsall)=dir(bamdir,".bam")
 You can try either upgrade your Bioconductor, or load the genome annotation 
 using GTF, or load the prebuild genome annotation using ‘.R.DB’ file, 
 e.g., mm9.refGene.R.DB. 
+
 
