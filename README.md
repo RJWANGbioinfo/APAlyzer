@@ -445,7 +445,8 @@ IPA_OUT=PASEXP_IPA(dfIPA, dfLE, flsall, Strandtype="invert", nts=1)
 ## Significantly regulated APA in 3’UTRs
 ```{r eval=FALSE}
 ############# 3utr APA #################
-sampleTable = data.frame(samplename = c('Heart_rep1',
+sampleTable = data.frame(samplename = 
+c('Heart_rep1',
 'Heart_rep2',
 'Heart_rep3',
 'Heart_rep4',
