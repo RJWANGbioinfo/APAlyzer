@@ -8,12 +8,19 @@ Changes in version 1.0.1 (2020-01-28)
 Changes in version 1.1.0 (2020-02-27)
 + Revise some typos in vignettes and mans.
 Changes in version 1.1.1 (2020-03-15)
-+ Add the GTF2PAS to convert GTF to PAS reference.
++ Add the PAS2GEF to convert GTF to PAS reference.
 + Add the REF4PAS to generate reference region for both 3'UTR and introic PAS at the same time.
 + Add the APAVolcano and APABox to plot the APAdiff results.
-+ Adjusted p-value in APAdiff
++ Add Adjusted p-value option in APAdiff
 + Allow the user to set argument minMQS to filter minimum mapping quality score of counted reads.
 + Add the build-in PAS reference for hg38 and mm10.
 + Add the build-in PAS reference for all PASs including conserved and non-conserved.
 + Update vignettes and mans.
-+ PAS reference regions are now move to a separate repo.
++ PAS reference regions are now moved to a separate repo.
+Changes in version 1.1.2 (2020-03-18)
++ Add the download_testbam to download the testing data bam files.
++ Add extra section 'Complete Analysis Example' in vignettes
++ Revise some typos in vignettes and mans.
+
+
+

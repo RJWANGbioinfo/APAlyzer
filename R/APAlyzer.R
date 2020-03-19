@@ -178,3 +178,20 @@ REF4PAS<-function(refUTRraw, dfIPAraw, dfLEraw){
 	return(PASREF)
 }
 
+download_testbam<-function(){
+URL="https://media.githubusercontent.com/media/RJWANGbioinfo/PAS_reference_RData_and_testing_data/master/bam/"	
+SAMPLES=c("Heart_rep1",
+"Heart_rep2",
+"Heart_rep3",
+"Heart_rep4",
+"Testis_rep1",
+"Testis_rep2",
+"Testis_rep3",
+"Testis_rep4")
+for(SAMPLE in SAMPLES)
+{
+print(paste0("Download  ",SAMPLE))
+download.file(url = paste0(URL,SAMPLE,".bam")
+                                   , destfile = paste0(SAMPLE,".bam"))
+}
+}

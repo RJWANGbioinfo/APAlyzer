@@ -49,7 +49,7 @@
 	dfIPAraw=dfIPA[which(dfIPA$Chrom=='chr19'),]
 	dfLEraw=dfLE[which(dfLE$Chrom=='chr19'),]	
     PASREF=REF4PAS(refUTRraw,dfIPAraw,dfLEraw)
-	UTRdbraw=PASREF$refUTRraw
+	UTRdbraw=PASREF$UTRdbraw
     dfIPA=PASREF$dfIPA
 	dfLE=PASREF$dfLE	
 }
