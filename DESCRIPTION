@@ -1,7 +1,7 @@
 Package: APAlyzer
 Type: Package
 Title: A toolkit for APA analysis using RNA-seq data
-Version: 1.1.3
+Version: 1.1.4
 Description: Perform 3'UTR APA, Intronic APA and gene expression analysis using RNA-seq data.
 Authors@R: c(person("Ruijia", "Wang", role=c("cre", "aut"),
                 email="rjwang.bioinfo@gmail.com", 

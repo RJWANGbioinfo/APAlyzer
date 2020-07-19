@@ -2,7 +2,7 @@
 title: "APAlyzer: A toolkit for APA analysis using RNA-seq data"
 author:
 - name: Ruijia Wang
-  affiliation: Program in Molecular Medicine, University of Massachusetts Medical School, Worcester, MA, 01605, USA
+  affiliation: QIAGEN Digital Insights, Concord, MA 01742, USA
 - name: Bin Tian
   affiliation: Department of Microbiology, Biochemistry and Molecular Genetics, Rutgers New Jersey Medical School, Newark, NJ, 07103, USA
 
