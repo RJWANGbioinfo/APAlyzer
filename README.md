@@ -1,5 +1,7 @@
 ![Image of logo](https://user-images.githubusercontent.com/51307984/73330398-a9a03880-422e-11ea-9d1b-a1312b47aa1c.png)
 # About APAlyzer
+[![Downloads from the bioconductor](https://www.bioconductor.org/packages/release/bioc/html/APAlyzer.html)](https://www.bioconductor.org/packages/release/bioc/html/APAlyzer.html)
+
 APAlyzer is a toolkit for bioinformatic analysis of alternative polyadenylation 
 (APA) events using RNA sequencing data. Our main approach is comparison of 
 sequencing reads in regions demarcated by high quality polyadenylation sites 
