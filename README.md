@@ -4,6 +4,7 @@
 [![](https://img.shields.io/badge/devel%20version-1.3.1-blue.svg)](https://github.com/RJWANGbioinfo/APAlyzer)
 [![](https://img.shields.io/badge/download-1071/total-blue.svg)](https://bioconductor.org/packages/stats/bioc/APAlyzer)
 [![](https://img.shields.io/badge/doi-10.1093/bioinformatics/btaa266-green.svg)](https://doi.org/10.1093/bioinformatics/btaa266)
+[![](https://travis-ci.org/RJWANGbioinfo/APAlyzer.svg?branch=master)](https://travis-ci.org/RJWANGbioinfo/APAlyzer)
 
 APAlyzer is a toolkit for bioinformatic analysis of alternative polyadenylation 
 (APA) events using RNA sequencing data. Our main approach is comparison of 
