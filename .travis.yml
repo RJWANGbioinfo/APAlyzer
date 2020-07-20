@@ -1,18 +1,54 @@
 language: r
-sudo: false
-cache: packages
+latex: false
 
-# For RProtoBuf dependency in Suggests.
+# environment variables
+env:
+  - DISPLAY=:99.0 PATH=$HOME/bin:$PATH RGL_USE_NULL=TRUE
+
+before_install:
+  - "curl -L https://xran.yihui.org/.gitconfig -o ~/.gitconfig"
+  - Rscript -e 'update.packages(.libPaths()[1], ask = FALSE)'
+  - Rscript -e "if (!require('xfun')) install.packages('xfun')"
+  - Rscript -e "xfun::pkg_load2('covr', 'tinytex')"
+  - Rscript -e "tinytex:::install_prebuilt()"
+  - rm TinyTeX.tar.gz
+
 addons:
   apt:
     packages:
-      - libprotobuf-dev
-      - libprotoc-dev
+    - ghc
+    - highlight
+    - optipng
+    - coffeescript
+    - asymptote
+    - graphviz
+    - scala
+    - qpdf
+    - texinfo
+    - cargo
+    - libmagick++-dev
+    - libpoppler-cpp-dev
+    - libglu1-mesa-dev
 
-# Package caching only makes sense for the release versions.
-r: bioc-release
 
-warnings_are_errors: false
-r_build_args:
-# Secure auth credentials can not be made available for pull requests.
-r_check_args: "$(if [[ $TRAVIS_PULL_REQUEST != 'false' ]]; then echo '--no-examples'; fi)"
+cache:
+  packages: yes
+
+jobs:
+  include:
+    - r: oldrel
+    - r: release
+      # deploy to xran after integration tests
+      after_success:
+        - Rscript -e 'covr::codecov()'
+    - r: release
+      name: Check knitr-examples
+      script:
+        - git clone https://github.com/yihui/knitr-examples.git
+        - rm knitr-examples/cache -rf
+        - make integration
+      # deploy to xran after integration tests
+      after_success:
+        - export R_PKG="$(basename $TRAVIS_REPO_SLUG)"
+        - "curl -L https://xran.yihui.org/r-xran | bash"
+    - r: devel
