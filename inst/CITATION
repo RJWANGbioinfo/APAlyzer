@@ -7,9 +7,10 @@ citEntry(entry="article",
          doi = "10.1093/bioinformatics/btaa266",
          volume = 36,
          issue = 12,
-         pages = 550,
-         textVersion = 3907¨C3909
+         pages = 3907¨C3909,
+         textVersion = 
          paste("Wang, Ruijia, and Bin Tian", 
                "APAlyzer: a bioinformatic package for analysis of alternative polyadenylation isoforms",
                 "Bioinformatics 36(12):3907¨C3909 (2020)" ))
+			
 				
