@@ -4,7 +4,9 @@ sudo: true
 cache: packages
 warnings_are_errors: false
 
-r: bioc-release
+r:
+  - oldrel
+  - bioc-release
 
 # environment variables set for all builds
 env:
