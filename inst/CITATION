@@ -11,6 +11,6 @@ citEntry(entry="article",
          textVersion = 
          paste("Wang, Ruijia, and Bin Tian", 
                "APAlyzer: a bioinformatic package for analysis of alternative polyadenylation isoforms",
-                "Bioinformatics 36(12):3907¨C3909 (2020)" ))
+                "Bioinformatics 36(12):3907-3909 (2020)" ))
 			
 				
