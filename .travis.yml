@@ -5,7 +5,6 @@ cache: packages
 warnings_are_errors: false
 
 r:
-  - oldrel
   - bioc-release
 
 # environment variables set for all builds
