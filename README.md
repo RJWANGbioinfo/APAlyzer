@@ -1,10 +1,11 @@
 ![Image of logo](https://user-images.githubusercontent.com/51307984/73330398-a9a03880-422e-11ea-9d1b-a1312b47aa1c.png)
 # About APAlyzer
 [![](https://img.shields.io/badge/release%20version-1.2.0-green.svg)](https://www.bioconductor.org/packages/APAlyzer)
-[![](https://img.shields.io/badge/devel%20version-1.3.2-blue.svg)](https://github.com/RJWANGbioinfo/APAlyzer)
-[![](https://img.shields.io/badge/download-1071/total-blue.svg)](https://bioconductor.org/packages/stats/bioc/APAlyzer)
+[![](https://img.shields.io/badge/devel%20version-1.3.3-blue.svg)](https://github.com/RJWANGbioinfo/APAlyzer)
+[![](https://img.shields.io/badge/download-1093/total-blue.svg)](https://bioconductor.org/packages/stats/bioc/APAlyzer)
 [![](https://img.shields.io/badge/doi-10.1093/bioinformatics/btaa266-green.svg)](https://doi.org/10.1093/bioinformatics/btaa266)
-
+[![](https://coveralls.io/repos/github/RJWANGbioinfo/APAlyzer/badge.svg?branch=master)](https://coveralls.io/github/RJWANGbioinfo/APAlyzer)
+[![](https://codecov.io/gh/RJWANGbioinfo/APAlyzer/branch/master/graph/badge.svg)](https://codecov.io/gh/RJWANGbioinfo/APAlyzer)
 
 APAlyzer is a toolkit for bioinformatic analysis of alternative polyadenylation 
 (APA) events using RNA sequencing data. Our main approach is comparison of 
