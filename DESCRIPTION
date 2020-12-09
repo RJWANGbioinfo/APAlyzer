@@ -20,3 +20,4 @@ VignetteBuilder: knitr
 License: LGPL-3
 Encoding: UTF-8
 Depends: R (>= 3.5.0)
+PackageStatus: Deprecated
