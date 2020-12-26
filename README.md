@@ -2,7 +2,7 @@
 # About APAlyzer
 [![](https://img.shields.io/badge/release%20version-1.4.0-green.svg)](https://www.bioconductor.org/packages/APAlyzer)
 [![](https://img.shields.io/badge/devel%20version-1.5.2-blue.svg)](https://github.com/RJWANGbioinfo/APAlyzer)
-[![](https://img.shields.io/badge/download-1433/total-blue.svg)](https://bioconductor.org/packages/stats/bioc/APAlyzer)
+[![](https://img.shields.io/badge/download-1672/total-blue.svg)](https://bioconductor.org/packages/stats/bioc/APAlyzer)
 [![](https://img.shields.io/badge/doi-10.1093/bioinformatics/btaa266-green.svg)](https://doi.org/10.1093/bioinformatics/btaa266)
 
 
