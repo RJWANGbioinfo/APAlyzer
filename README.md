@@ -12,7 +12,7 @@ APAlyzer is a toolkit for bioinformatic analysis of alternative polyadenylation
 (APA) events using RNA sequencing data. Our main approach is comparison of 
 sequencing reads in regions demarcated by high quality polyadenylation sites 
 (PASs) annotated in the PolyA_DB database 
-(http://exon.njms.rutgers.edu/polya_db/v3/). 
+(https://exon.apps.wistar.org/PolyA_DB/v3/). 
 The current version (v3.0) uses RNA-seq data to examine APA events in 3’ 
 untranslated regions (3’UTRs) and in introns. The coding regions are used 
 for gene expression calculation.
