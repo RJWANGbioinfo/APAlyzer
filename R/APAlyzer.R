@@ -26,7 +26,7 @@
     igstrand=FALSE
     if(STRINFOR == "NONE")
         {
-        igstrand=TRUE
+            igstrand=TRUE
         }
     if (STRINFOR == "invert")
         {
