@@ -23,13 +23,18 @@
 
 .getcount<-function(DB,BMAfile,STRINFOR){
     preprocess.reads.function = NULL
-    if (STRINFOR == "INVERT")
+    igstrand=FALSE
+    if(STRINFOR == "NONE")
+        {
+        igstrand=TRUE
+        }
+    if (STRINFOR == "invert")
         {
             preprocess.reads.function = invertStrand
         }
     counttbl= summarizeOverlaps(DB, BMAfile,
     mode="IntersectionNotEmpty",
-    singleEnd=TRUE, ignore.strand=TRUE,
+    singleEnd=TRUE, ignore.strand=igstrand,
     preprocess.reads=preprocess.reads.function)
     return(counttbl)
 }
