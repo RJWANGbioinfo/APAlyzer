@@ -32,7 +32,7 @@ OutfileName = paste0(OutDirPath,"/",
 					basename(BamfilePath)))
 					
 print(paste0("Exporting: ",basename(OutfileName)))				
-rtracklayer::export(atacReads, 
+rtracklayer::export(Reads, 
 					Rsamtools::BamFile(OutfileName))
 }
 
