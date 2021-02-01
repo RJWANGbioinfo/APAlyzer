@@ -1,7 +1,7 @@
 Package: APAlyzer
 Type: Package
 Title: A toolkit for APA analysis using RNA-seq data
-Version: 1.5.4
+Version: 1.5.5
 Description: Perform 3'UTR APA, Intronic APA and gene expression analysis using RNA-seq data.
 Authors@R: c(person("Ruijia", "Wang", role=c("cre", "aut"),
                 email="rjwang.bioinfo@gmail.com", 
@@ -12,8 +12,8 @@ biocViews: Sequencing, RNASeq, DifferentialExpression, GeneExpression,
         GeneRegulation, Annotation, DataImport, Software
 Imports: GenomicRanges, GenomicFeatures, GenomicAlignments, DESeq2, ggrepel,
         SummarizedExperiment, Rsubread, stats, ggplot2, methods, rtracklayer,
-		ensembldb, VariantAnnotation, dplyr, tidyr, repmis
-Suggests: knitr, rmarkdown, BiocStyle, org.Mm.eg.db, AnnotationDbi, TBX20BamSubset, Rsamtools, testthat
+		ensembldb, VariantAnnotation, dplyr, tidyr, repmis, Rsamtools
+Suggests: knitr, rmarkdown, BiocStyle, org.Mm.eg.db, AnnotationDbi, TBX20BamSubset, testthat, pasillaBamSubset
 URL: https://github.com/RJWANGbioinfo/APAlyzer/
 BugReports: https://github.com/RJWANGbioinfo/APAlyzer/issues
 VignetteBuilder: knitr

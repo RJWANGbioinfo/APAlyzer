@@ -36,3 +36,5 @@ Changes in version 1.5.3 (2021-01-05)
 + Updated the link of PolyA_DB.
 Changes in version 1.5.4 (2021-01-10)
 + Fixed the bug in PASEXP_3UTR.
+Changes in version 1.5.5 (2021-01-31)
++ Added ThreeMostPairBam to support paired-end bam.
