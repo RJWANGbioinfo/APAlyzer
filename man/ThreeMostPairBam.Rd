@@ -26,7 +26,7 @@
     library("pasillaBamSubset")
 	
     ThreeMostPairBam (BamfilePath=untreated3_chr4(), 
-						OutDirPath='/home/soft/1208/', 
+						OutDirPath=getwd(), 
 						StrandType='forward-reverse')
 
 }
