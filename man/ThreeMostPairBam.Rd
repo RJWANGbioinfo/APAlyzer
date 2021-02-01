@@ -5,7 +5,7 @@
     ThreeMostPairBam(BamfilePath, OutDirPath, StrandType="NONE")
 }
 \arguments{
-    \item{BamfilePath}{file path of a bam file)
+    \item{BamfilePath}{file path of a bam file}
     \item{OutDirPath}{output folder path}
     \item{StrandType}{strand type of the bam file;
     "forward-reverse": read 1 forward but read 2 is reverse sequencing,
