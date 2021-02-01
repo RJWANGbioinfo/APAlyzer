@@ -18,5 +18,5 @@ importFrom(stats, fisher.test)
 importFrom(stats, t.test)
 importFrom("stats", "aggregate", "p.adjust")
 importFrom(methods, is)
-export(REF3UTR,PASEXP_3UTR,REFCDS,GENEXP_CDS,PASEXP_IPA,
+export(REF3UTR,PASEXP_3UTR,REFCDS,GENEXP_CDS,PASEXP_IPA,ThreeMostPairBam,
 		APAdiff,REF4PAS,PAS2GEF,APAVolcano,APABox,download_testbam)
