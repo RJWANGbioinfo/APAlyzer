@@ -450,6 +450,24 @@ CDSdbraw=REFCDS(txdb,IDDB)
 DFGENEraw=GENEXP_CDS(CDSdbraw, flsall, Strandtype="forward")
 ```
 
+# Extract 3'most alignment from the pair-end bam file 
+Start from APAlyzer 1.5.5, we provides a new fouction called `ThreeMostPairBam`
+for users to extract three prime most alignment from the paired-end bam file and save it into 
+a new bam file. For example:
+```{r eval=FALSE}
+## Extract 3 prime most alignment of a paired-end 
+## bam file and saved into a new bam file
+Bamfile='/path/to/inputdir/input.bam'
+Outdir='/path/to/outdir/'  
+StrandType="forward-reverse"    ## "forward-reverse",  or "reverse-forward" or "NONE"	
+ThreeMostPairBam (BamfilePath=Bamfile, 
+					OutDirPath=Outdir, 
+					StrandType='forward-reverse')
+``` 
+The output bamfile (A bam file named as *.3most.bam located in `Outdir`) 
+can be used as input file in `PASEXP_3UTR` and `PASEXP_IPA`.
+
+
 # Complete Analysis Example: APA analysis in mouse testis versus heart
 ## About this dataset
 To provide a complete tutorial of APA analysis using our package, we have now 
