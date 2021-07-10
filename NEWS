@@ -38,3 +38,5 @@ Changes in version 1.5.4 (2021-01-10)
 + Fixed the bug in PASEXP_3UTR.
 Changes in version 1.5.5 (2021-01-31)
 + Added ThreeMostPairBam to support paired-end bam.
+Changes in version 1.7.1 (2021-07-09)
++ Fixed the missing SS column issues in PAS2GEF.
