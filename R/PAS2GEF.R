@@ -255,7 +255,9 @@ dfLE=dfLE[!duplicated(dfLE),]
 dfLE$Chr=paste0('chr',dfLE$Chr)
 dfLE=dfLE[,c('gene_symbol','Chr','Strand','LEstart','TES')]
 colnames(dfLE)=c('gene_symbol','Chrom','Strand','LEstart','TES')
-return(dfLE)
+dfLE_dfIPA=list(dfIPAsim,dfLE)
+names(dfLE_dfIPA)=c('dfIPAsim','dfLE')
+return(dfLE_dfIPA)
 }
 
 PAS2GEF<-function(GTFfile)
@@ -269,8 +271,8 @@ dfIPAALL=.GTF2IPA(EDB,TXDB,finaldf)
 dfIPAXXX=dfIPAALL$dfIPA
 dfupSSXXX=dfIPAALL$dfupSS
 dfdnSS3XXX=dfIPAALL$dfdnSS3
-dfLE=.GTF2LE(TXDB,dfIPAXXX,dfupSSXXX,dfdnSS3XXX)
-PASREF=list(refUTRraw,dfIPAXXX,dfLE)
+dfLE_dfIPA=.GTF2LE(TXDB,dfIPAXXX,dfupSSXXX,dfdnSS3XXX)
+PASREF=list(refUTRraw,dfLE_dfIPA$dfIPAsim,dfLE_dfIPA$dfLE)
 names(PASREF)=c('refUTRraw','dfIPA','dfLE')
 return(PASREF)
 }
