@@ -1,7 +1,7 @@
 ![Image of logo](https://user-images.githubusercontent.com/51307984/73330398-a9a03880-422e-11ea-9d1b-a1312b47aa1c.png)
 # About APAlyzer
 [![](https://img.shields.io/badge/release%20version-1.6.0-green.svg)](https://www.bioconductor.org/packages/APAlyzer)
-[![](https://img.shields.io/badge/devel%20version-1.7.2-blue.svg)](https://github.com/RJWANGbioinfo/APAlyzer)
+[![](https://img.shields.io/badge/devel%20version-1.7.3-blue.svg)](https://github.com/RJWANGbioinfo/APAlyzer)
 [![](https://img.shields.io/badge/download-2945/total-blue.svg)](https://bioconductor.org/packages/stats/bioc/APAlyzer)
 [![](http://www.bioconductor.org/shields/downloads/release/APAlyzer.svg)](https://bioconductor.org/packages/stats/bioc/APAlyzer)
 [![](https://img.shields.io/badge/doi-10.1093/bioinformatics/btaa266-green.svg)](https://doi.org/10.1093/bioinformatics/btaa266)
@@ -422,7 +422,13 @@ ThreeMostPairBam (BamfilePath=Bamfile,
 					StrandType='forward-reverse')
 ``` 
 The output bamfile (A bam file named as *.3most.bam located in `Outdir`) 
-can be used as input file in `PASEXP_3UTR` and `PASEXP_IPA`.
+can be used as input file in `PASEXP_3UTR`. To use this bam file for `PASEXP_IPA`, the user need to 
+set the `SeqType` to "ThreeMostPairEnd", for example:
+
+```{r eval=FALSE}
+ThreemostBamfile="test.3most.bam"
+IPA_OUTraw=PASEXP_IPA(dfIPA, dfLE, ThreemostBamfile, Strandtype="forward", SeqType="ThreeMostPairEnd")
+```
 
 # Complete Analysis Example: APA analysis in mouse testis versus heart
 ## About this dataset

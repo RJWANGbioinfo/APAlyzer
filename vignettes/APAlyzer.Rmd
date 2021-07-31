@@ -470,7 +470,7 @@ set the `SeqType` to "ThreeMostPairEnd", for example:
 
 ```{r eval=FALSE}
 ThreemostBamfile="test.3most.bam"
-IPA_OUTraw=PASEXP_IPA(dfIPA, dfLE, ThreemostBamfile, Strandtype="forward", SeqType=="ThreeMostPairEnd")
+IPA_OUTraw=PASEXP_IPA(dfIPA, dfLE, ThreemostBamfile, Strandtype="forward", SeqType="ThreeMostPairEnd")
 ```
 
 
