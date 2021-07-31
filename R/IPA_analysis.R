@@ -99,7 +99,14 @@
 }
 
 PASEXP_IPA<-function(dfIPAraw, dfLEraw, flS, 
-						Strandtype="NONE", nts=1, minMQS=0){
+						Strandtype="NONE", nts=1, minMQS=0, SeqType="SingleEnd"){
+    if(SeqType=="SingleEnd"){
+        isPairedEnd=FALSE
+    } else if(SeqType=="ThreeMostPairEnd"){
+        isPairedEnd=TRUE
+    } else {
+        Print("ERROR: SeqType is NOT Valid")	
+    }
     for (k in seq_len(length(flS))){
         fls=flS[k]
         STRINFOR=Strandtype
@@ -142,13 +149,13 @@ PASEXP_IPA<-function(dfIPAraw, dfLEraw, flS,
         IPAstr=.get_strand_IPA(STRINFOR)
         UPtblraw = featureCounts(fls,annot.ext=UPref,
                                     strandSpecific=IPAstr,minMQS=minMQS,
-                                    allowMultiOverlap=TRUE,nthreads=nts)
+                                    allowMultiOverlap=TRUE,nthreads=nts,isPairedEnd=isPairedEnd)
         DNtblraw = featureCounts(fls,annot.ext=DNref,
                                     strandSpecific=IPAstr,minMQS=minMQS,
-                                    allowMultiOverlap=TRUE,nthreads=nts)
+                                    allowMultiOverlap=TRUE,nthreads=nts,isPairedEnd=isPairedEnd)
         LEtblraw = featureCounts(fls,annot.ext=LEref,
                                     strandSpecific=IPAstr,minMQS=minMQS,
-                                    allowMultiOverlap=TRUE,nthreads=nts)
+                                    allowMultiOverlap=TRUE,nthreads=nts,isPairedEnd=isPairedEnd)
 
         UPtbl=.getIPAtbl(UPtblraw, SPNAME,UPlength,'IPA_UP')
         DNtbl=.getIPAtbl(DNtblraw , SPNAME,DNlength,'IPA_DN')

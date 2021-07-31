@@ -40,3 +40,5 @@ Changes in version 1.5.5 (2021-01-31)
 + Added ThreeMostPairBam to support paired-end bam.
 Changes in version 1.7.1 (2021-07-09)
 + Fixed the missing SS column issues in PAS2GEF.
+Changes in version 1.7.2 (2021-07-31)
++ Fixed the issues of using 3'most bam file (generate using ThreeMostPairBam) in PASEXP_IPA.

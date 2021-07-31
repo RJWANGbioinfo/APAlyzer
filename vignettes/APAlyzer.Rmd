@@ -465,7 +465,13 @@ ThreeMostPairBam (BamfilePath=Bamfile,
 					StrandType='forward-reverse')
 ``` 
 The output bamfile (A bam file named as *.3most.bam located in `Outdir`) 
-can be used as input file in `PASEXP_3UTR` and `PASEXP_IPA`.
+can be used as input file in `PASEXP_3UTR`. To use this bam file for `PASEXP_IPA`, the user need to 
+set the `SeqType` to "ThreeMostPairEnd", for example:
+
+```{r eval=FALSE}
+ThreemostBamfile="test.3most.bam"
+IPA_OUTraw=PASEXP_IPA(dfIPA, dfLE, ThreemostBamfile, Strandtype="forward", SeqType=="ThreeMostPairEnd")
+```
 
 
 # Complete Analysis Example: APA analysis in mouse testis versus heart
