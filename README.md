@@ -140,6 +140,8 @@ dfIPAraw=PASREFraw$dfIPA
 dfLEraw=PASREFraw$dfLE
 PASREF=REF4PAS(refUTRraw,dfIPAraw,dfLEraw)
 ```
+Start from APAlyzer 2.0, two annotation methods can be set through `AnnoMethod=` to annotate the PAS, 'legacy' or 'V2' (default), 
+'legacy' is the old method used within previous versions, while 'V2' is the updated and improved version.
 
 
 # Analysis of APA in 3’UTRs
@@ -295,13 +297,19 @@ test_3UTRmuti=APAdiff(sampleTable1,
                         conKET='NT',
                         trtKEY='KD',
                         PAS='3UTR',
-                        CUTreads=0)
+                        CUTreads=0,
+                        p_adjust_methods="fdr",
+                        MultiTest='unpaired t-test')
 head(test_3UTRmuti,2)
 table(test_3UTRmuti$APAreg)
 ```
-In the replicate design, ‘RED’ is difference of averaged relative expression 
-between two groups; ‘pvalue’ is the p-value from t-test. In this case, 
-‘UP’ is defined as ‘RED’ >0 and ‘pvalue’ <0.05; while ‘DN’ is the opposite; 
+In the replicate design, additional parameter `MultiTest` can be used to set the statistical method.
+In the current version, there are 3 methods can be set: 
+"unpaired t-test" (default), "paired t-test", "ANOVA".
+After the running of `APAdiff`, a few columns will be generated:
+‘RED’ is difference of averaged relative expression 
+between two groups; ‘pvalue’ is the p-value calculated through the method defined by `MultiTest`. 
+'APAreg' is the predicted APA regulation direction; ‘UP’ is defined as ‘RED’ >0 and ‘pvalue’ <0.05; while ‘DN’ is the opposite; 
 and ‘NC’ is the remaining genes.
 
 ## Significantly regulated APA in introns
