@@ -2,7 +2,7 @@
 title: "APAlyzer: A toolkit for APA analysis using RNA-seq data"
 author:
 - name: Ruijia Wang
-  affiliation: QIAGEN Digital Insights, Concord, MA 01742, USA
+  affiliation: Vor Biopharma, Cambridge, MA 02140, USA
 - name: Bin Tian
   affiliation: Department of Microbiology, Biochemistry and Molecular Genetics, Rutgers New Jersey Medical School, Newark, NJ, 07103, USA
 
@@ -145,7 +145,7 @@ dfIPAraw=PASREFraw$dfIPA
 dfLEraw=PASREFraw$dfLE
 PASREF=REF4PAS(refUTRraw,dfIPAraw,dfLEraw)
 ```
-Start from APAlyzer 2.0, two annotation methods can be set through `AnnoMethod=` to annotate the PAS, 'legacy' or 'V2' (default), 
+Start from APAlyzer 1.9.1, two annotation methods can be set through `AnnoMethod=` to annotate the PAS, 'legacy' or 'V2' (default), 
 'legacy' is the old method used within previous versions, while 'V2' is the updated and improved version.
 
 # Analysis of APA in 3’UTRs
