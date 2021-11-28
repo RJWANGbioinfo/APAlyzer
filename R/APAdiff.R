@@ -124,26 +124,50 @@
     return(sizeCUT)
 }
 
-.calt_p<-function(dfsubXXX,col9S,col10S,adjust_methods){
+.calt_p<-function(dfsubXXX,col9S,col10S,adjust_methods, Test){
+	stopifnot(is.element(Test, c('unpaired t-test','paired t-test','ANOVA')))
+	
     trtlen=length(col9S)
-    conlen=length(col10S)    
+    conlen=length(col10S)
+	if (Test == 'paired t-test'){
+		paired = TRUE
+	} else {
+		paired = FALSE
+	}
     if(trtlen>1 & conlen>1){
+	if (Test != 'ANOVA'){
     dfsubXXX$pvalue = apply(dfsubXXX[,c(col9S,col10S)], 
                     1, function (x) {t.test(x[seq_len(trtlen)],
-                    x[(1+trtlen):(trtlen+conlen)])$p.value})	
-    }
+                    x[(1+trtlen):(trtlen+conlen)], paired = paired)$p.value})	
+    } else {
+	suppressMessages(library(HybridMTest))
+    dfsubXXX$pvalue = HybridMTest::row.oneway.anova(dfsubXXX[,c(col9S,col10S)],c(rep("Trt",trtlen),rep("Con",conlen)))$pval	
+	}
+	
+	}
 
     if(trtlen>1 & conlen==1){
+	
+	if (Test != 'ANOVA'){
     dfsubXXX$pvalue = apply(dfsubXXX[,c(col9S,col10S)], 
                     1, function (x) {t.test(x[seq_len(trtlen)],
-                    mu=x[(1+trtlen):(trtlen+conlen)])$p.value})
-    }    
+                    mu=x[(1+trtlen):(trtlen+conlen)], paired = paired)$p.value})
+    } else {
+	stop("ERROR: ANOVA requires at lease two samples in each group")
+	}
+	}    
     
     if(trtlen==1 & conlen>1){
+	
+	if (Test != 'ANOVA'){
     dfsubXXX$pvalue = apply(dfsubXXX[,c(col9S,col10S)], 
                     1, function (x) {t.test(mu=x[seq_len(trtlen)],
-                    x[(1+trtlen):(trtlen+conlen)])$p.value})
-    }
+                    x[(1+trtlen):(trtlen+conlen)], paired = paired)$p.value})
+    } else {
+	stop("ERROR: ANOVA requires at lease two samples in each group")
+	}
+	} 
+	
 	dfsubXXX$p_adj	= p.adjust(dfsubXXX$pvalue, method = adjust_methods)
     return(dfsubXXX)
 
@@ -193,7 +217,7 @@
     return(xxxx)
 }
 
-.final_tbl_3mutil2<-function(mutiraw, trtsamples,consamples, CUTreads,p_adjust_methods){
+.final_tbl_3mutil2<-function(mutiraw, trtsamples,consamples, CUTreads, p_adjust_methods, Test){
     col5S=paste0(trtsamples,'_areads')
     col6S=paste0(consamples,'_areads')
     col7S=paste0(trtsamples,'_creads')
@@ -206,7 +230,7 @@
     dfsubXXX$trt_RE=rowMeans(dfsubXXX[,col9S], na.rm = TRUE)
     dfsubXXX$con_RE=rowMeans(dfsubXXX[,col10S], na.rm = TRUE)
     dfsubXXX$RED=dfsubXXX$trt_RE-dfsubXXX$con_RE
-    dfsubXXX=.calt_p(dfsubXXX,col9S,col10S,p_adjust_methods)    
+    dfsubXXX=.calt_p(dfsubXXX,col9S,col10S,p_adjust_methods, Test)    
     dfsubXXX=.caltype2(dfsubXXX)
     dfsubXXX=dfsubXXX[c('gene_symbol','RED','pvalue','p_adj','APAreg')]
     dfsubXXX=dfsubXXX[!duplicated(dfsubXXX),]
@@ -302,7 +326,7 @@
     return(xxxx)
 }
 
-.final_tbl_IPAmutil2<-function(mutiraw,trtsamples,consamples,CUTreads,p_adjust_methods){
+.final_tbl_IPAmutil2<-function(mutiraw,trtsamples,consamples,CUTreads,p_adjust_methods, Test){
     col5S=paste0(trtsamples,'_IPA_UPreads')
     col6S=paste0(consamples,'_IPA_UPreads')
     col7S=paste0(trtsamples,'_LEreads')
@@ -317,7 +341,7 @@
     dfsubXXX$trt_RE=rowMeans(dfsubXXX[,col9S], na.rm = TRUE)
     dfsubXXX$con_RE=rowMeans(dfsubXXX[,col10S], na.rm = TRUE)
     dfsubXXX$RED=dfsubXXX$trt_RE-dfsubXXX$con_RE
-    dfsubXXX=.calt_p(dfsubXXX,col9S,col10S,p_adjust_methods)    
+    dfsubXXX=.calt_p(dfsubXXX,col9S,col10S,p_adjust_methods, Test)    
     dfsubXXX=.caltype3(dfsubXXX)
     dfsubXXX=dfsubXXX[c('gene_symbol','PASid','RED','pvalue','p_adj','APAreg')]
     dfsubXXX=dfsubXXX[!duplicated(dfsubXXX),]
@@ -337,12 +361,13 @@
 }
 
 APAdiff<-function(sampleTable,mutiraw, conKET='NT',trtKEY='KD',
-                    PAS='3UTR',CUTreads=0,p_adjust_methods="fdr"){
+                    PAS='3UTR',CUTreads=0,p_adjust_methods="fdr",
+					MultiTest='unpaired t-test'){
     consamples=.getSPs(sampleTable,conKET)
     trtsamples=.getSPs(sampleTable,trtKEY)
     reptypeRAW=.judge_rep(trtsamples,consamples)
     if(reptypeRAW=='multi' & PAS=='3UTR'){
-        APA_diff=.final_tbl_3mutil2(mutiraw,trtsamples,consamples,CUTreads,p_adjust_methods)
+        APA_diff=.final_tbl_3mutil2(mutiraw,trtsamples,consamples,CUTreads,p_adjust_methods, MultiTest)
     }
 
     if(reptypeRAW=='single' & PAS=='3UTR'){
@@ -350,13 +375,13 @@ APAdiff<-function(sampleTable,mutiraw, conKET='NT',trtKEY='KD',
     }
 
     if(reptypeRAW=='multi' & PAS=='IPA'){
-        APA_diff=.final_tbl_IPAmutil2(mutiraw,trtsamples,consamples,CUTreads,p_adjust_methods)
+        APA_diff=.final_tbl_IPAmutil2(mutiraw,trtsamples,consamples,CUTreads,p_adjust_methods, MultiTest)
     }
     if(reptypeRAW=='single' & PAS=='IPA'){
         APA_diff=.final_tbl_IPAsingl(mutiraw,trtsamples,consamples,CUTreads,p_adjust_methods)
     }
     if(reptypeRAW=='ERROR'){
-    print("Sample matrix, error, please check your sample table")
+    print("Sample matrix error, please check your sample table")
     }
     APA_diff=APA_diff[!is.na(APA_diff$RED),]
     return(APA_diff)

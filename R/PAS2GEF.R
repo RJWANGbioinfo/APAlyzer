@@ -1,16 +1,5 @@
-.getALLPAS<-function(EDB,TXDB)
+.annotatePAS_legacy<-function(pasdb,TXDB)
 {
-############### all PAS ##################
-TX=transcripts(EDB, columns=c("tx_id", "gene_id",'gene_name'))
-dfTX = as.data.frame(TX)
-dfTX$PAS=dfTX$end
-dfTX[dfTX$strand=='-',]$PAS=dfTX[dfTX$strand=='-',]$start
-dfTX$start=dfTX$PAS
-dfTX$end=dfTX$PAS
-dfPAS=dfTX
-pasdb<-makeGRangesFromDataFrame(dfPAS, keep.extra.columns = TRUE)
-
-###### annotation PAS
 test_mm9 <- locateVariants(pasdb, TXDB, AllVariants())
 test_mm9intron <- locateVariants(pasdb, TXDB, IntronVariants())
 test_mm9<-c(test_mm9,test_mm9intron) 
@@ -31,6 +20,113 @@ finaldf[which(finaldf$LOCATION=='coding'),]$ORDERID=3
 finaldf[which(finaldf$LOCATION=='threeUTR'),]$ORDERID=4
 finaldf=finaldf[with(finaldf, order(uniID2, ORDERID)),]
 finaldf=finaldf[!duplicated(finaldf$uniID2),]
+return(finaldf)
+}
+
+.annotatePASRegion<-function(pasdb,dbreigon,dfTXGeneMapping,flag)
+{
+
+x = unlist(dbreigon)
+x$IndexID=1:length(x)
+x$transcript_id=names(x)
+names(x)=x$IndexID
+acc2sym <- data.frame(names(x), x$transcript_id)
+colnames(acc2sym)=c('IndexID','transcript_id')
+acc2sym=merge(acc2sym, dfTXGeneMapping, on='transcript_id', all.x=TRUE)
+x=x[acc2sym$IndexID]
+names(x) = acc2sym$gene_id
+dbreigon = split(x, names(x))
+dbreigon = GenomicRanges::reduce(dbreigon)
+olp = findOverlaps(pasdb, dbreigon)
+if (length(olp)>0){
+hit=pasdb[queryHits(olp), ]
+hit$LOCATION=flag
+hit$PASid=paste(seqnames(hit),start(hit),strand(hit),sep = ":")
+hit = as.data.frame(hit)
+
+} else {
+hit = "NoHit"
+}
+return(hit)
+}
+
+.annotatePAS_V2<-function(pasdb,TXDB,dfTXGeneMapping)
+{
+##a.5UTR
+fiveUTRs = fiveUTRsByTranscript(TXDB, use.names=TRUE)
+fiveUTRhit = .annotatePASRegion(pasdb,fiveUTRs,dfTXGeneMapping,'fiveUTR')
+
+##b.intron
+introns = intronsByTranscript(TXDB, use.names=TRUE)
+intronhit = .annotatePASRegion(pasdb,introns,dfTXGeneMapping,'intron')
+
+##c.3UTR
+threeUTRs = threeUTRsByTranscript(TXDB, use.names=TRUE)
+threeUTRhit = .annotatePASRegion(pasdb,threeUTRs,dfTXGeneMapping,'threeUTR')
+
+##d.CDS
+cds = cdsBy(TXDB, by="tx", use.names=TRUE)
+cdshit = .annotatePASRegion(pasdb,cds,dfTXGeneMapping,'coding')
+
+##e.all Exons
+exon = exonsBy(TXDB, by="tx", use.names=TRUE)
+exonhit = .annotatePASRegion(pasdb,exon,dfTXGeneMapping,'Exon')
+
+## Creat header
+dbhit=as.data.frame(pasdb[1])
+dbhit$LOCATION="NONE"
+dbhit$PASid="NONE"
+for (hit in list(fiveUTRhit,intronhit,threeUTRhit,cdshit,exonhit)){
+if(class(hit)=="data.frame"){
+dbhit = rbind(dbhit,hit)
+}
+}
+dbhit=dbhit[dbhit$PASid!="NONE",]
+finaldf=dbhit[,c('PASid','LOCATION','gene_id')]
+colnames(finaldf)[3]="GENEID"
+finaldf$uniID1=paste(finaldf$PASid,finaldf$GENEID,finaldf$LOCATION,sep = ":")
+finaldf$uniID2=paste(finaldf$PASid,finaldf$GENEID,sep = ":")
+finaldf=finaldf[!duplicated(finaldf),]
+finaldf$ORDERID=10
+if(nrow(finaldf[which(finaldf$LOCATION=='fiveUTR'),])>0){
+finaldf[which(finaldf$LOCATION=='fiveUTR'),]$ORDERID=1
+}
+
+if(nrow(finaldf[which(finaldf$LOCATION=='intron'),])>0){
+finaldf[which(finaldf$LOCATION=='intron'),]$ORDERID=2
+}
+
+if(nrow(finaldf[which(finaldf$LOCATION=='coding'),])>0){
+finaldf[which(finaldf$LOCATION=='coding'),]$ORDERID=3
+}
+
+if(nrow(finaldf[which(finaldf$LOCATION=='threeUTR'),])>0){
+finaldf[which(finaldf$LOCATION=='threeUTR'),]$ORDERID=4
+}
+finaldf=finaldf[with(finaldf, order(uniID2, ORDERID)),]
+finaldf=finaldf[!duplicated(finaldf$uniID2),]
+return(finaldf)
+}
+
+.getALLPAS<-function(EDB,TXDB,AnnoMethod)
+{
+stopifnot(is.element(AnnoMethod, c('V2','legacy')))
+############### all PAS ##################
+dfPAS = as.data.frame(EDB[which(EDB$type=='transcript'),][,c('transcript_id','gene_id','gene_name')])
+dfPAS$PAS=dfPAS$end
+dfPAS[dfPAS$strand=='-',]$PAS=dfPAS[dfPAS$strand=='-',]$start
+dfPAS$start=dfPAS$PAS
+dfPAS$end=dfPAS$PAS
+dfTXGeneMapping=dfPAS[,c('transcript_id','gene_id')]
+dfTXGeneMapping=dfTXGeneMapping[!duplicated(dfTXGeneMapping), ]
+dfTXGeneMapping=dfTXGeneMapping[!is.na(dfTXGeneMapping$transcript_id),]
+pasdb<-makeGRangesFromDataFrame(dfPAS, keep.extra.columns = TRUE)
+###### annotation PAS
+if (AnnoMethod=='legacy'){
+finaldf=.annotatePAS_legacy(pasdb,TXDB)
+} else {
+finaldf=.annotatePAS_V2(pasdb,TXDB,dfTXGeneMapping)
+}
 dfPAS$Chr=paste0('chr',dfPAS$seqnames)
 dfPAS$PASid=paste(dfPAS$seqnames,dfPAS$PAS,dfPAS$strand,sep = ":")
 dfinfo=dfPAS[,c('PASid','Chr','strand','PAS','gene_id','gene_name')]
@@ -40,33 +136,11 @@ return(finaldf)
 }
 
 
-.GTF2refUTRraw<-function(EDB,TXDB,finaldf)
+.GTF2refUTRraw<-function(TXDB,finaldf)
 {
-##### 3UTR PAS ######
-df3UTR=finaldf[which(finaldf$LOCATION=='threeUTR'), ]
-df3UTR_P=df3UTR[which(df3UTR$strand=='+'), ]
-df3UTR_P=df3UTR_P[with(df3UTR_P, order(GENEID, PAS)),]
-df3UTR_N=df3UTR[which(df3UTR$strand=='-'), ]
-df3UTR_N=df3UTR_N[with(df3UTR_N, order(GENEID, -PAS)),]
-df3UTR=rbind(df3UTR_P, df3UTR_N)
-df3UTR_count = df3UTR %>%
-  group_by(GENEID) %>%
-  mutate(col = 1:n()) %>% ##create featureID
-  mutate(count = n())
-df3UTR_count = data.frame(df3UTR_count)
-df3UTR_count$pA_type='M'
-df3UTR_count[which(df3UTR_count$col==1 & df3UTR_count$count==1), ]$pA_type='S'
-df3UTR_count[which(df3UTR_count$col==df3UTR_count$count & df3UTR_count$count>1), ]$pA_type='L'
-df3UTR_count[which(df3UTR_count$col==1 & df3UTR_count$count>1), ]$pA_type='F'
-dfF=df3UTR_count[df3UTR_count$pA_type=='F',][,c('GENEID', 'Chr', 'strand', 'PAS','gene_name')]
-dfL=df3UTR_count[df3UTR_count$pA_type=='L',][,c('GENEID', 'Chr', 'strand', 'PAS','gene_name')]
-colnames(dfF)=c('GENEID', 'Chrom', 'Strand', 'First','gene_symbol')
-colnames(dfL)=c('GENEID', 'Chrom', 'Strand', 'Last','gene_symbol')
-dfFL=merge(dfF,dfL,by=c('GENEID', 'Chrom', 'Strand', 'gene_symbol'))
-dfFL=dfFL[!duplicated(dfFL$GENEID),]
 
 ####### CDS end ############
-cds <- cdsBy(EDB, "gene")
+cds <- cdsBy(TXDB, "gene")
 x = unlist(cds)
 cds1=split(x, names(x))
 test=as.data.frame(cds1)
@@ -94,6 +168,44 @@ names(allcdsminmax)[1]="GENEID"
 names(allcdsminmax)[2]="Strand"
 allcdsminmax=allcdsminmax[,c('GENEID','Strand','cdsend')]
 
+
+##### 3UTR PAS ######
+df3UTR=finaldf[which(finaldf$LOCATION=='threeUTR'), ]
+df3UTR=merge(df3UTR,allcdsminmax[,c('GENEID','cdsend')],by=c('GENEID'))
+## Filter 3UTR PAS by CDS
+df3UTR=df3UTR[which(((df3UTR$strand=='+')&(df3UTR$PAS>df3UTR$cdsend))|((df3UTR$strand=='-')&(df3UTR$PAS<df3UTR$cdsend))),]
+
+df3UTR_P=df3UTR[which(df3UTR$strand=='+'), ]
+df3UTR_P=df3UTR_P[with(df3UTR_P, order(GENEID, PAS)),]
+df3UTR_N=df3UTR[which(df3UTR$strand=='-'), ]
+df3UTR_N=df3UTR_N[with(df3UTR_N, order(GENEID, -PAS)),]
+df3UTR=rbind(df3UTR_P, df3UTR_N)
+df3UTR_count = df3UTR %>%
+  group_by(GENEID) %>%
+  mutate(col = 1:n()) %>% ##create featureID
+  mutate(count = n())
+df3UTR_count = data.frame(df3UTR_count)
+df3UTR_count$pA_type='M'
+if(nrow(df3UTR_count[which(df3UTR_count$col==1 & df3UTR_count$count==1), ])>0){
+df3UTR_count[which(df3UTR_count$col==1 & df3UTR_count$count==1), ]$pA_type='S'
+}
+
+if(nrow(df3UTR_count[which(df3UTR_count$col==df3UTR_count$count & df3UTR_count$count>1), ])>0){
+df3UTR_count[which(df3UTR_count$col==df3UTR_count$count & df3UTR_count$count>1), ]$pA_type='L'
+}
+
+if(nrow(df3UTR_count[which(df3UTR_count$col==1 & df3UTR_count$count>1), ])>0){
+df3UTR_count[which(df3UTR_count$col==1 & df3UTR_count$count>1), ]$pA_type='F'
+}
+
+
+dfF=df3UTR_count[df3UTR_count$pA_type=='F',][,c('GENEID', 'Chr', 'strand', 'PAS','gene_name')]
+dfL=df3UTR_count[df3UTR_count$pA_type=='L',][,c('GENEID', 'Chr', 'strand', 'PAS','gene_name')]
+colnames(dfF)=c('GENEID', 'Chrom', 'Strand', 'First','gene_symbol')
+colnames(dfL)=c('GENEID', 'Chrom', 'Strand', 'Last','gene_symbol')
+dfFL=merge(dfF,dfL,by=c('GENEID', 'Chrom', 'Strand', 'gene_symbol'))
+dfFL=dfFL[!duplicated(dfFL$GENEID),]
+
 dfFLCDE=merge(dfFL,allcdsminmax,by=c('GENEID','Strand'))
 dfFLCDE=dfFLCDE[which(((dfFLCDE$Strand=='+')&(dfFLCDE$First>dfFLCDE$cdsend))|((dfFLCDE$Strand=='-')&(dfFLCDE$First<dfFLCDE$cdsend))),]
 dfFLCDE$First=as.integer(dfFLCDE$First)
@@ -117,8 +229,11 @@ return(refUTRraw)
 introns = intronsByTranscript(TXDB, use.names=TRUE)
 dfintrons=as.data.frame(introns)
 colnames(dfintrons)=c('group','tx_id','Chrom','Start','End', 'width', 'Strand')
-tx2gene <- mcols(transcripts(EDB, columns=c("tx_id", "gene_id",'gene_name')))
+# tx2gene <- mcols(transcripts(EDB, columns=c("tx_id", "gene_id",'gene_name')))
+# colnames(tx2gene)=c("tx_id", "GENEID",'gene_symbol')
+tx2gene = as.data.frame(EDB[which(EDB$type=='transcript'),])[,c('transcript_id','gene_id','gene_name')]
 colnames(tx2gene)=c("tx_id", "GENEID",'gene_symbol')
+tx2gene=tx2gene[!duplicated(tx2gene), ]
 dfintrons=merge(dfintrons, tx2gene, by='tx_id')
 dfintrons=dfintrons[,c('GENEID','gene_symbol','Chrom','Start','End','Strand','width')]
 dfintrons=dfintrons[!duplicated(dfintrons),]
@@ -224,7 +339,7 @@ dfTES=dfTES[!duplicated(dfTES),]
 
 ###I exon###
 exondb=exonsBy(TXDB, by="gene")
-exondb = reduce(exondb)
+exondb = GenomicRanges::reduce(exondb)
 exonsdf=as.data.frame(exondb)
 exonsdfP=exonsdf[which(exonsdf$strand=='+'),]
 exonsdfN=exonsdf[which(exonsdf$strand=='-'),]
@@ -260,18 +375,23 @@ names(dfLE_dfIPA)=c('dfIPAsim','dfLE')
 return(dfLE_dfIPA)
 }
 
-PAS2GEF<-function(GTFfile)
+PAS2GEF<-function(GTFfile,AnnoMethod="V2")
 {
-TXDB<-makeTxDbFromGFF(GTFfile)
-DB <- ensDbFromGtf(gtf = GTFfile)
-EDB <- EnsDb(DB)
-finaldf=.getALLPAS(EDB,TXDB)
-refUTRraw=.GTF2refUTRraw(EDB,TXDB,finaldf)
+print("PAS2GEF: Reading GTF file")
+EDB <- import(GTFfile)
+TXDB <- makeTxDbFromGRanges(EDB)
+print("PAS2GEF: Extracting and annotating all PASs")
+finaldf=.getALLPAS(EDB,TXDB,AnnoMethod)
+print("PAS2GEF: Extracting and filtering 3'UTR PASs")
+refUTRraw=.GTF2refUTRraw(TXDB,finaldf)
+print("PAS2GEF: Extracting IPAs")
 dfIPAALL=.GTF2IPA(EDB,TXDB,finaldf)
+print("PAS2GEF: Extracting 3' last exons")
 dfIPAXXX=dfIPAALL$dfIPA
 dfupSSXXX=dfIPAALL$dfupSS
 dfdnSS3XXX=dfIPAALL$dfdnSS3
 dfLE_dfIPA=.GTF2LE(TXDB,dfIPAXXX,dfupSSXXX,dfdnSS3XXX)
+print("PAS2GEF: Finalizing references")
 PASREF=list(refUTRraw,dfLE_dfIPA$dfIPAsim,dfLE_dfIPA$dfLE)
 names(PASREF)=c('refUTRraw','dfIPA','dfLE')
 return(PASREF)

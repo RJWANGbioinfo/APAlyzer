@@ -4,7 +4,7 @@
 statistics significance between two sample groups}
 \usage{
     APAdiff(sampleTable,mutiraw, conKET='NT',
-    trtKEY='KD',PAS='3UTR',CUTreads=0,p_adjust_methods="fdr")
+    trtKEY='KD', PAS='3UTR', CUTreads=0, p_adjust_methods="fdr"， MultiTest='unpaired t-test')
 }
 \arguments{
     \item{sampleTable}{a dataframe of sample table
@@ -18,6 +18,9 @@ statistics significance between two sample groups}
 	\item{p_adjust_methods}{p value correction method, the method can be 
 	"holm", "hochberg", "hommel", "bonferroni", "BH", "BY","fdr", "none", 
 	default is "fdr"}
+	\item{MultiTest}{statistics testing method for muti-replicates designs, the method can be 
+	"unpaired t-test", "paired t-test", "ANOVA", 
+	default is "unpaired t-test"}
     }
 \description{
     Calculate delta relative expression (RED) and
@@ -42,7 +45,7 @@ statistics significance between two sample groups}
         condition = c("NT","KD"))
     ## Analysis 3'UTR APA between KD and NT group using muti-replicates
     test_3UTRmuti=APAdiff(sampleTable1,DFUTRraw,
-    conKET='NT',trtKEY='KD',PAS='3UTR',CUTreads=0,p_adjust_methods="fdr")
+    conKET='NT',trtKEY='KD',PAS='3UTR',CUTreads=0,p_adjust_methods="fdr",MultiTest='unpaired t-test')
 
     ## Analysis 3'UTR APA between KD and NT group without replicates
     test_3UTRsing=APAdiff(sampleTable2,DFUTRraw,
@@ -50,7 +53,7 @@ statistics significance between two sample groups}
 
     ## Analysis IPA between KD and NT group
     test_IPAmuti=APAdiff(sampleTable1,IPA_OUTraw,
-    conKET='NT',trtKEY='KD',PAS='IPA',CUTreads=0,p_adjust_methods="fdr")
+    conKET='NT',trtKEY='KD',PAS='IPA',CUTreads=0,p_adjust_methods="fdr",MultiTest='unpaired t-test')
 
     ## Analysis IPA between KD and NT group without replicates
     test_IPAsing=APAdiff(sampleTable2,IPA_OUTraw,

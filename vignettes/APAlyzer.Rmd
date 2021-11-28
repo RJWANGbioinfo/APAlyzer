@@ -145,7 +145,8 @@ dfIPAraw=PASREFraw$dfIPA
 dfLEraw=PASREFraw$dfLE
 PASREF=REF4PAS(refUTRraw,dfIPAraw,dfLEraw)
 ```
-
+Start from APAlyzer 2.0, two annotation methods can be set through `AnnoMethod=` to annotate the PAS, 'legacy' or 'V2' (default), 
+'legacy' is the old method used within previous versions, while 'V2' is the updated and improved version.
 
 # Analysis of APA in 3’UTRs
 
@@ -288,16 +289,19 @@ test_3UTRsing=APAdiff(sampleTable2,DFUTRraw,
                         conKET='NT',
                         trtKEY='KD',
                         PAS='3UTR',
-                        CUTreads=0)
+                        CUTreads=0,
+                        p_adjust_methods="fdr")
 ```
 The `APAdiff` function requires two inputs: 1) A sample table defining 
 groups/conditions of the samples, and 2) read coverage information of 
 aUTRs and cUTRs, which can be obtained by `PASEXP_3UTR` from the previous 
 step. The group name, i.e., treatment or control, can be defined b 
 `trtKEY=` and `conKET=`; the PAS type analyzed should be defined by `PAS=`; 
-and the read cutoff used for aUTR and cUTR is defined by `CUTreads=` 
-with the default value being 0. In the non-replicate design, the APA pattern 
-will be compared between two samples and output will be shown in a data frame:
+the read cutoff used for aUTR and cUTR is defined by `CUTreads=` 
+with the default value being 0; and the method used for p value correction 
+is defined through `p_adjust_methods=` with the default value being 'fdr'.
+In the non-replicate design, the APA pattern will be compared between 
+two samples and output will be shown in a data frame:
 ```{r eval=TRUE}
 head(test_3UTRsing,2)
 table(test_3UTRsing$APAreg)
@@ -323,13 +327,19 @@ test_3UTRmuti=APAdiff(sampleTable1,
                         conKET='NT',
                         trtKEY='KD',
                         PAS='3UTR',
-                        CUTreads=0)
+                        CUTreads=0,
+                        p_adjust_methods="fdr",
+                        MultiTest='unpaired t-test')
 head(test_3UTRmuti,2)
 table(test_3UTRmuti$APAreg)
 ```
-In the replicate design, ‘RED’ is difference of averaged relative expression 
-between two groups; ‘pvalue’ is the p-value from t-test. In this case, 
-‘UP’ is defined as ‘RED’ >0 and ‘pvalue’ <0.05; while ‘DN’ is the opposite; 
+In the replicate design, additional parameter `MultiTest` can be used to set the statistical method.
+In the current version, there are 3 methods can be set: 
+"unpaired t-test" (default), "paired t-test", "ANOVA".
+After the running of `APAdiff`, a few columns will be generated:
+‘RED’ is difference of averaged relative expression 
+between two groups; ‘pvalue’ is the p-value calculated through the method defined by `MultiTest`. 
+'APAreg' is the predicted APA regulation direction; ‘UP’ is defined as ‘RED’ >0 and ‘pvalue’ <0.05; while ‘DN’ is the opposite; 
 and ‘NC’ is the remaining genes.
 
 ## Significantly regulated APA in introns
@@ -347,7 +357,8 @@ test_IPAsing=APAdiff(sampleTable2,
                         conKET='NT',
                         trtKEY='KD',
                         PAS='IPA',
-                        CUTreads=0) 
+                        CUTreads=0,
+                        p_adjust_methods="fdr") 
 head(test_IPAsing,2)
 ```
 
@@ -358,7 +369,9 @@ test_IPAmuti=APAdiff(sampleTable1,
                         conKET='NT',
                         trtKEY='KD',
                         PAS='IPA',
-                        CUTreads=0)
+                        CUTreads=0,
+                        p_adjust_methods="fdr",
+                        MultiTest='unpaired t-test')
 head(test_IPAmuti,2)
 ```  
 

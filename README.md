@@ -1,8 +1,8 @@
 ![Image of logo](https://user-images.githubusercontent.com/51307984/73330398-a9a03880-422e-11ea-9d1b-a1312b47aa1c.png)
 # About APAlyzer
-[![](https://img.shields.io/badge/release%20version-1.6.0-green.svg)](https://www.bioconductor.org/packages/APAlyzer)
-[![](https://img.shields.io/badge/devel%20version-1.7.3-blue.svg)](https://github.com/RJWANGbioinfo/APAlyzer)
-[![](https://img.shields.io/badge/download-2945/total-blue.svg)](https://bioconductor.org/packages/stats/bioc/APAlyzer)
+[![](https://img.shields.io/badge/release%20version-1.8.0-green.svg)](https://www.bioconductor.org/packages/APAlyzer)
+[![](https://img.shields.io/badge/devel%20version-2.0.1-blue.svg)](https://github.com/RJWANGbioinfo/APAlyzer)
+[![](https://img.shields.io/badge/download-3519/total-blue.svg)](https://bioconductor.org/packages/stats/bioc/APAlyzer)
 [![](http://www.bioconductor.org/shields/downloads/release/APAlyzer.svg)](https://bioconductor.org/packages/stats/bioc/APAlyzer)
 [![](https://img.shields.io/badge/doi-10.1093/bioinformatics/btaa266-green.svg)](https://doi.org/10.1093/bioinformatics/btaa266)
 

@@ -6,6 +6,7 @@
 }
 \arguments{
     \item{GTFfile}{GTF file of gene annotation}
+    \item{AnnoMethod}{annotation method used to build PAS reference, either 'legacy' or 'V2', default is 'V2'}
 }
 \description{
     Build 3'UTR PAS and IPA (IPA and LE) Reference using GTF file.
@@ -23,7 +24,7 @@
               destfile='Mus_musculus.GRCm38.99.gtf.gz')			  
 	GTFfile="Mus_musculus.GRCm38.99.gtf.gz"	
 \donttest{
-	PASREF=PAS2GEF(GTFfile)	
+	PASREF=PAS2GEF(GTFfile, AnnoMethod="V2")	
 	refUTRraw=PASREF$refUTRraw
     dfIPA=PASREF$dfIPA
 	dfLE=PASREF$dfLE
