@@ -2,7 +2,7 @@
 \alias{PAS2GEF}
 \title{PAS2GEF, build reference regions for 3'UTR PASs}
 \usage{
-    PAS2GEF(GTFfile)
+    PAS2GEF(GTFfile,AnnoMethod="V2")
 }
 \arguments{
     \item{GTFfile}{GTF file of gene annotation}

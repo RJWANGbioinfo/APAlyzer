@@ -4,7 +4,7 @@
 statistics significance between two sample groups}
 \usage{
     APAdiff(sampleTable,mutiraw, conKET='NT',
-    trtKEY='KD', PAS='3UTR', CUTreads=0, p_adjust_methods="fdr"， MultiTest='unpaired t-test')
+    trtKEY='KD', PAS='3UTR', CUTreads=0, p_adjust_methods="fdr", MultiTest='unpaired t-test')
 }
 \arguments{
     \item{sampleTable}{a dataframe of sample table
