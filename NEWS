@@ -48,3 +48,5 @@ Changes in version 1.9.1 (2021-11-28)
 + Added `MultiTest` parameter for APAdiff.
 + Improved the performance and fixed issues in PAS2GEF.
 + Update documents and authorships.
+Changes in version 1.9.2 (2022-01-02)
++ Added supporting of multi-condition design in `APAdiff`.

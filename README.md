@@ -1,7 +1,7 @@
 ![Image of logo](https://user-images.githubusercontent.com/51307984/73330398-a9a03880-422e-11ea-9d1b-a1312b47aa1c.png)
 # About APAlyzer
 [![](https://img.shields.io/badge/release%20version-1.8.0-green.svg)](https://www.bioconductor.org/packages/APAlyzer)
-[![](https://img.shields.io/badge/devel%20version-1.9.1-blue.svg)](https://github.com/RJWANGbioinfo/APAlyzer)
+[![](https://img.shields.io/badge/devel%20version-1.9.2-blue.svg)](https://github.com/RJWANGbioinfo/APAlyzer)
 [![](https://img.shields.io/badge/download-3519/total-blue.svg)](https://bioconductor.org/packages/stats/bioc/APAlyzer)
 [![](http://www.bioconductor.org/shields/downloads/release/APAlyzer.svg)](https://bioconductor.org/packages/stats/bioc/APAlyzer)
 [![](https://img.shields.io/badge/doi-10.1093/bioinformatics/btaa266-green.svg)](https://doi.org/10.1093/bioinformatics/btaa266)
@@ -341,6 +341,42 @@ test_IPAmuti=APAdiff(sampleTable1,
                         CUTreads=0)
 head(test_IPAmuti,2)
 ```  
+
+## Significantly regulated APA in multi-condition design
+Starting from APAlyzer 1.9.2, `APAdiff` can also be used on multiple conditions design (with replicates in each condition).
+To trigger such analysis, simply define your sample table with multiple conditions/groups, e.g.:
+
+```{r eval=TRUE}
+# Build the sample table with replicates
+sampleTable3 = data.frame(samplename = c(names(flsall)),
+                    condition = c(rep("NT",2),rep("KD1",2),rep("KD2",2)))
+sampleTable3
+```
+
+then call the 3'UTR APA analysis through:
+
+```{r eval=TRUE}
+test_3UTRmuti=APAdiff(sampleTable3,
+                        DFUTRraw, 
+                        PAS='3UTR',
+                        CUTreads=0,
+                        p_adjust_methods="fdr")
+head(test_3UTRmuti,2)
+```
+
+Or call the differential IPA analysis through:
+
+```{r eval=TRUE}
+test_IPAmuti=APAdiff(sampleTable3,
+                        IPA_OUTraw, 
+                        PAS='IPA',
+                        CUTreads=0,
+                        p_adjust_methods="fdr")
+head(test_IPAmuti,2)
+```  
+In the multi-condition design, the output contains 2 result columns: ‘pvalue’ is 
+statistical significance based on the one-way ANOVA across all conditions; ‘p_adj’ is FDR 
+adjusted pvalues.
 
 # Visualization of analysis results
 Start from APAlyzer 1.2.1, we provides two new fouction called `APAVolcano`

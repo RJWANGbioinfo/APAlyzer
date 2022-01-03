@@ -360,9 +360,47 @@
     return(xxxx)
 }
 
+.calt_p_multiANOVA<-function(dfsubXXX,col9S,conditions,adjust_methods){
+    suppressMessages(library(HybridMTest))
+    dfsubXXX$pvalue = HybridMTest::row.oneway.anova(dfsubXXX[,c(col9S)],conditions)$pval	
+    dfsubXXX$p_adj = p.adjust(dfsubXXX$pvalue, method = adjust_methods)
+    return(dfsubXXX)
+
+}
+
+.final_multigroupAPA<-function(sampleTable,mutiraw,
+                    PAS='3UTR',CUTreads=0,p_adjust_methods="fdr"){
+    if(length(unique(sampleTable$condition)) <= 2){
+        stop("Error: multigroupAPA only accept conditions > 2")
+    }
+    if(PAS=='3UTR'){
+    col5S=paste0(sampleTable$samplename,'_areads')
+    col7S=paste0(sampleTable$samplename,'_creads')
+    col9S=paste0(sampleTable$samplename,'_3UTR_RE')
+    dfsubXXX=mutiraw[,c('gene_symbol',col5S,col7S,col9S)]
+    }
+    if(PAS=='IPA'){
+    col5S=paste0(sampleTable$samplename,'_IPA_UPreads')
+    col7S=paste0(sampleTable$samplename,'_LEreads')
+    col9S=paste0(sampleTable$samplename,'_IPA_RE')
+    dfsubXXX=mutiraw[,c('gene_symbol','PASid',col5S,col7S,col9S)]
+    }
+
+    READSCOLS=c(col5S,col7S) 
+    dfsubXXX=.trimCommon(dfsubXXX,READSCOLS,CUTreads)
+    APA_diff=.calt_p_multiANOVA(dfsubXXX,col9S,sampleTable$condition,p_adjust_methods)
+
+    return(APA_diff)
+}
+
 APAdiff<-function(sampleTable,mutiraw, conKET='NT',trtKEY='KD',
                     PAS='3UTR',CUTreads=0,p_adjust_methods="fdr",
-					MultiTest='unpaired t-test'){
+                    MultiTest='unpaired t-test'){
+    if(length(unique(sampleTable$condition)) < 2){
+        stop("Error: APAdiff only accept conditions >= 2")
+    }
+
+    if(length(unique(sampleTable$condition)) == 2){
     consamples=.getSPs(sampleTable,conKET)
     trtsamples=.getSPs(sampleTable,trtKEY)
     reptypeRAW=.judge_rep(trtsamples,consamples)
@@ -384,5 +422,14 @@ APAdiff<-function(sampleTable,mutiraw, conKET='NT',trtKEY='KD',
     print("Sample matrix error, please check your sample table")
     }
     APA_diff=APA_diff[!is.na(APA_diff$RED),]
+    }
+
+    if(length(unique(sampleTable$condition)) > 2){
+        if(min(table(sampleTable$condition)) == 1){
+            stop("Error: Each condition MUST contains replicates when conditions >= 2 in sample table")
+        }
+    APA_diff = .final_multigroupAPA(sampleTable,mutiraw,PAS,CUTreads,p_adjust_methods)
+    }
     return(APA_diff)
 }
+
