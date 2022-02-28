@@ -145,7 +145,7 @@ dfIPAraw=PASREFraw$dfIPA
 dfLEraw=PASREFraw$dfLE
 PASREF=REF4PAS(refUTRraw,dfIPAraw,dfLEraw)
 ```
-Starting from APAlyzer 1.9.1, two annotation methods can be set through `AnnoMethod=` to annotate the PAS, 'legacy' or 'V2' (default), 
+Start from APAlyzer 1.9.1, two annotation methods can be set through `AnnoMethod=` to annotate the PAS, 'legacy' or 'V2' (default), 
 'legacy' is the old method used within previous versions, while 'V2' is the updated and improved version.
 
 # Analysis of APA in 3’UTRs
@@ -311,8 +311,8 @@ The output contains 4 columns: ‘gene symbol’ describes gene information;
 statistical significance based on the Fisher’s exact test; ‘p_adj’ is FDR 
 adjusted  pvalue and ‘APAreg’ is 3’UTR APA regulation pattern in the gene. 
 We define 3 types in ‘APAreg’, ‘UP’ means aUTR abundance in the treatment group
- (‘KD’ in this case) is at least 5% higher than that in control 
- (‘NT’ in this case), and ‘pvalue’<0.05; ‘DN’ means aUTR abundance is 5% lower 
+ (‘KD’ in this case) is at least 5% lower than that in control 
+ (‘NT’ in this case), and ‘pvalue’<0.05; ‘DN’ means aUTR abundance is 5% higher 
  in treatment than that in control and p-value<0.05; ‘NC’ are the remaining 
  genes. With respect to 3’UTR size changes, 
 ‘UP’ means 3’UTR shortening, and ‘DN’ 3’UTR lengthening.
@@ -374,42 +374,6 @@ test_IPAmuti=APAdiff(sampleTable1,
                         MultiTest='unpaired t-test')
 head(test_IPAmuti,2)
 ```  
-
-## Significantly regulated APA in multi-condition design
-Starting from APAlyzer 1.9.2, `APAdiff` can also be used on multiple conditions design (with replicates in each condition).
-To trigger such analysis, simply define your sample table with multiple conditions/groups, e.g.:
-
-```{r eval=TRUE}
-# Build the sample table with replicates
-sampleTable3 = data.frame(samplename = c(names(flsall)),
-                    condition = c(rep("NT",2),rep("KD1",2),rep("KD2",2)))
-sampleTable3
-```
-
-then call the 3'UTR APA analysis through:
-
-```{r eval=TRUE}
-test_3UTRmuti=APAdiff(sampleTable3,
-                        DFUTRraw, 
-                        PAS='3UTR',
-                        CUTreads=0,
-                        p_adjust_methods="fdr")
-head(test_3UTRmuti,2)
-```
-
-Or call the differential IPA analysis through:
-
-```{r eval=TRUE}
-test_IPAmuti=APAdiff(sampleTable3,
-                        IPA_OUTraw, 
-                        PAS='IPA',
-                        CUTreads=0,
-                        p_adjust_methods="fdr")
-head(test_IPAmuti,2)
-```  
-In the multi-condition design, the output contains 2 result columns: ‘pvalue’ is 
-statistical significance based on the one-way ANOVA across all conditions; ‘p_adj’ is FDR 
-adjusted pvalues.
 
 # Visualization of analysis results
 Start from APAlyzer 1.2.1, we provides two new fouction called `APAVolcano`

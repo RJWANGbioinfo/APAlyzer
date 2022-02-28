@@ -50,3 +50,6 @@ Changes in version 1.9.1 (2021-11-28)
 + Update documents and authorships.
 Changes in version 1.9.2 (2022-01-02)
 + Added supporting of multi-condition design in `APAdiff`.
+Changes in version 1.9.3 (2022-02-27)
++ Fixed the issues caused by the lastest ensembl GRCm39 GTF.
++ Fixed typos in vignettes

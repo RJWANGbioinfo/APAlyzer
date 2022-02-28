@@ -218,6 +218,7 @@ dfFLCDE[index1,]$cdsend=dfFLCDE[index1,]$cdsend-(100-dfFLCDE[index1,]$distance)
 index2=which(dfFLCDE$Strand=='-' & dfFLCDE$distance<100)
 dfFLCDE[index2,]$cdsend=dfFLCDE[index2,]$cdsend+(100-dfFLCDE[index2,]$distance)
 refUTRraw=dfFLCDE[,c('gene_symbol','Chrom','Strand','First','Last','cdsend')]
+refUTRraw=refUTRraw[!is.na(refUTRraw$gene_symbol),]
 return(refUTRraw)
 }
 
@@ -262,12 +263,15 @@ dfdnSS3=dfdnSS3[!duplicated(dfdnSS3$SSID),]
 colnames(dfdnSS3)=c("GENEID", "gene_symbol", "Chrom", "Strand",  "downstreamSS","type","SSID")
 dfdnSS3$Chrom=paste0('chr',dfdnSS3$Chrom)
 dfupSS$Chrom=paste0('chr',dfupSS$Chrom)
+dfupSS=dfupSS[!is.na(dfupSS$gene_symbol),]
+dfdnSS3=dfdnSS3[!is.na(dfdnSS3$gene_symbol),]
 
 ######### IPA and SS ############
 dfIPA=finaldf[(finaldf$LOCATION=='intron'),]
 dfIPA=dfIPA[,c('PASid','Chr','PAS','strand','GENEID','gene_name')]
 colnames(dfIPA)=c('PASid','Chrom','Pos','Strand','GENEID','gene_symbol')
 dfIPA=dfIPA[!duplicated(dfIPA),]
+dfIPA=dfIPA[!is.na(dfIPA$gene_symbol),]
 DFIPASS=list(dfIPA,dfupSS,dfdnSS3)
 names(DFIPASS)=c('dfIPA','dfupSS','dfdnSS3')
 return(DFIPASS)
@@ -322,6 +326,7 @@ dfIPAREF=dfIPAREF[!duplicated(dfIPAREF),]
 dfIPAsim=dfHIT_combine[,c('PASid','gene_symbol','Chrom','Strand','Pos','upstreamSS','downstreamSS')]
 dfIPAsim=as.data.frame(dfIPAsim)
 dfIPAsim=dfIPAsim[!duplicated(dfIPAsim),]
+dfIPAsim=dfIPAsim[!is.na(dfIPAsim$gene_symbol),]
 
 ############ TES ##############
 dfgenic = as.data.frame(genes(TXDB))
@@ -370,6 +375,7 @@ dfLE=dfLE[!duplicated(dfLE),]
 dfLE$Chr=paste0('chr',dfLE$Chr)
 dfLE=dfLE[,c('gene_symbol','Chr','Strand','LEstart','TES')]
 colnames(dfLE)=c('gene_symbol','Chrom','Strand','LEstart','TES')
+dfLE=dfLE[!is.na(dfLE$gene_symbol),]
 dfLE_dfIPA=list(dfIPAsim,dfLE)
 names(dfLE_dfIPA)=c('dfIPAsim','dfLE')
 return(dfLE_dfIPA)
