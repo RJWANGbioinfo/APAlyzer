@@ -281,8 +281,8 @@ The output contains 4 columns: ‘gene symbol’ describes gene information;
 statistical significance based on the Fisher’s exact test; ‘p_adj’ is FDR 
 adjusted  pvalue and ‘APAreg’ is 3’UTR APA regulation pattern in the gene. 
 We define 3 types in ‘APAreg’, ‘UP’ means aUTR abundance in the treatment group
- (‘KD’ in this case) is at least 5% higher than that in control 
- (‘NT’ in this case), and ‘pvalue’<0.05; ‘DN’ means aUTR abundance is 5% lower 
+ (‘KD’ in this case) is at least 5% lower than that in control 
+ (‘NT’ in this case), and ‘pvalue’<0.05; ‘DN’ means aUTR abundance is 5% higher 
  in treatment than that in control and p-value<0.05; ‘NC’ are the remaining 
  genes. With respect to 3’UTR size changes, 
 ‘UP’ means 3’UTR shortening, and ‘DN’ 3’UTR lengthening.
