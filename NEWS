@@ -53,3 +53,5 @@ Changes in version 1.9.2 (2022-01-02)
 Changes in version 1.9.3 (2022-02-27)
 + Fixed the issues caused by the lastest ensembl GRCm39 GTF.
 + Fixed typos in vignettes
+Changes in version 1.9.4 (2022-02-28)
++ Fixed typos in vignettes

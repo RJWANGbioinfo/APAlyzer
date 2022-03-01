@@ -1,7 +1,7 @@
 ![Image of logo](https://user-images.githubusercontent.com/51307984/73330398-a9a03880-422e-11ea-9d1b-a1312b47aa1c.png)
 # About APAlyzer
 [![](https://img.shields.io/badge/release%20version-1.8.0-green.svg)](https://www.bioconductor.org/packages/APAlyzer)
-[![](https://img.shields.io/badge/devel%20version-1.9.3-blue.svg)](https://github.com/RJWANGbioinfo/APAlyzer)
+[![](https://img.shields.io/badge/devel%20version-1.9.4-blue.svg)](https://github.com/RJWANGbioinfo/APAlyzer)
 [![](https://img.shields.io/badge/download-3519/total-blue.svg)](https://bioconductor.org/packages/stats/bioc/APAlyzer)
 [![](http://www.bioconductor.org/shields/downloads/release/APAlyzer.svg)](https://bioconductor.org/packages/stats/bioc/APAlyzer)
 [![](https://img.shields.io/badge/doi-10.1093/bioinformatics/btaa266-green.svg)](https://doi.org/10.1093/bioinformatics/btaa266)
@@ -281,11 +281,11 @@ The output contains 4 columns: ‘gene symbol’ describes gene information;
 statistical significance based on the Fisher’s exact test; ‘p_adj’ is FDR 
 adjusted  pvalue and ‘APAreg’ is 3’UTR APA regulation pattern in the gene. 
 We define 3 types in ‘APAreg’, ‘UP’ means aUTR abundance in the treatment group
- (‘KD’ in this case) is at least 5% lower than that in control 
- (‘NT’ in this case), and ‘pvalue’<0.05; ‘DN’ means aUTR abundance is 5% higher 
+ (‘KD’ in this case) is at least 5% higher than that in control 
+ (‘NT’ in this case), and ‘pvalue’<0.05; ‘DN’ means aUTR abundance is 5% lower 
  in treatment than that in control and p-value<0.05; ‘NC’ are the remaining 
  genes. With respect to 3’UTR size changes, 
-‘UP’ means 3’UTR shortening, and ‘DN’ 3’UTR lengthening.
+‘UP’ means 3’UTR lengthening, and ‘DN’ 3’UTR shortening.
 
 For the replicate design, we use t-test for significance analysis. However, 
 other tools based on negative binomial data distribution, such as  
