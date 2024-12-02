@@ -19,7 +19,7 @@ for gene expression calculation.
 
 ## Authors
 * **Ruijia Wang**
-* **Bin Tian**
+* **Bin Tian (btian@wistar.org)**
 
 ## License
 This project is licensed under the LGPL-3 License.
