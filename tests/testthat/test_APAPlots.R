@@ -14,5 +14,5 @@ test_that("APAPlots works properly", {
     conKET='NT',trtKEY='KD',PAS='3UTR',CUTreads=0)
 	UTR_APA_PLOT=APAVolcano(test_3UTRmuti, PAS='3UTR', 
 							Pcol = "pvalue", top=5, plot_title='3UTR APA')
-	expect_type(UTR_APA_PLOT, "list")
+	expect_s3_class(UTR_APA_PLOT, "ggplot")
 })

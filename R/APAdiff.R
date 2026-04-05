@@ -140,8 +140,9 @@
                     1, function (x) {t.test(x[seq_len(trtlen)],
                     x[(1+trtlen):(trtlen+conlen)], paired = paired)$p.value})	
     } else {
-	suppressMessages(library(HybridMTest))
-    dfsubXXX$pvalue = HybridMTest::row.oneway.anova(dfsubXXX[,c(col9S,col10S)],c(rep("Trt",trtlen),rep("Con",conlen)))$pval	
+	if (!requireNamespace("HybridMTest", quietly = TRUE))
+		stop("Package 'HybridMTest' is required for ANOVA test.")
+    dfsubXXX$pvalue = HybridMTest::row.oneway.anova(dfsubXXX[,c(col9S,col10S)],c(rep("Trt",trtlen),rep("Con",conlen)))$pval
 	}
 	
 	}
@@ -361,8 +362,9 @@
 }
 
 .calt_p_multiANOVA<-function(dfsubXXX,col9S,conditions,adjust_methods){
-    suppressMessages(library(HybridMTest))
-    dfsubXXX$pvalue = HybridMTest::row.oneway.anova(dfsubXXX[,c(col9S)],conditions)$pval	
+    if (!requireNamespace("HybridMTest", quietly = TRUE))
+		stop("Package 'HybridMTest' is required for ANOVA test.")
+    dfsubXXX$pvalue = HybridMTest::row.oneway.anova(dfsubXXX[,c(col9S)],conditions)$pval
     dfsubXXX$p_adj = p.adjust(dfsubXXX$pvalue, method = adjust_methods)
     return(dfsubXXX)
 

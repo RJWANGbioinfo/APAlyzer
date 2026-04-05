@@ -1,3 +1,13 @@
+Changes in version 1.9.5 (2026-04-05)
++ Fixed compatibility with R-devel and Bioconductor 3.22/3.23.
++ Fixed test failure caused by ggplot2 4.0+ S7 object type change.
++ Replaced deprecated element_line(size=) with element_line(linewidth=).
++ Replaced library(HybridMTest) calls with requireNamespace(); moved HybridMTest to Suggests.
++ Migrated makeTxDbFromGRanges import from GenomicFeatures to txdbmaker.
++ Added txdbmaker, rlang, and S4Vectors to Imports.
++ Fixed undefined global variables (Print, queryHits, download.file, etc.).
++ Added .Rbuildignore to exclude .travis.yml from build.
++ Updated License field in DESCRIPTION.
 Changes in version 0.99.1 (2019-07-14)
 + Submitted to Bioconductor
 Changes in version 0.99.2 (2019-08-18)

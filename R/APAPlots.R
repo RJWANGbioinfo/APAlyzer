@@ -1,3 +1,5 @@
+utils::globalVariables(c("APAreg", "Label", "color", "RED"))
+
 APAVolcano <- function(df, Pcol = "pvalue",PAS='3UTR',
                         top = -1, markergenes = NULL,
                         y_cutoff = 0.05,xlab = "RED", ylab = "-Log10(P-value)",
@@ -35,11 +37,11 @@ APAVolcano <- function(df, Pcol = "pvalue",PAS='3UTR',
     gg$color[gg$Label!=""] = "black"
     PAScolor = c(PAScolor, "black")
     names(PAScolor) = c("NC", "UP", "DN", "black")
-    p = ggplot(gg, aes(x=gg[,x], y=gg[,y], label=Label))
+    p = ggplot(gg, aes(x=.data[[x]], y=.data[[y]], label=Label))
     p = p + geom_point(aes(fill=APAreg), shape = 21, alpha=alpha)
     p = p + geom_point(aes(colour=color), shape = 21, alpha=alpha, show.legend = FALSE)
     if(!(top==0 & is.null(markergenes))){
-      p = p + ggrepel::geom_text_repel(aes(gg[,x], gg[,y], color = APAreg, label = Label),
+      p = p + ggrepel::geom_text_repel(aes(.data[[x]], .data[[y]], color = APAreg, label = Label),
 	  force = force, fontface = 'bold', size = 3,
                                        nudge_y = 0.2,
 									   nudge_x = 0.2,
@@ -51,7 +53,7 @@ APAVolcano <- function(df, Pcol = "pvalue",PAS='3UTR',
     p = p + theme(text = element_text(colour="black",size = 14),
                   plot.title = element_text(hjust = 0.5, size=16),
                   axis.text = element_text(colour="gray10"))
-    p = p + theme(axis.line = element_line(size=0.5, colour = "black"),
+    p = p + theme(axis.line = element_line(linewidth=0.5, colour = "black"),
                   panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
                   panel.border = element_blank(), panel.background = element_blank())
     p = p + geom_hline(yintercept = -log10(y_cutoff), linetype = "dotted")
@@ -90,7 +92,7 @@ APABox <- function(df, xlab = "APAreg", ylab = "RED",
 					  axis.text = element_text(colour="gray10"))
 	p = p + geom_hline(yintercept = 0, linetype = "dotted")
 	p = p + labs(x=xlab, y=ylab, title=plot_title)
-	p = p + theme(axis.line = element_line(size=0.5, colour = "black"),
+	p = p + theme(axis.line = element_line(linewidth=0.5, colour = "black"),
 				  panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
 				  panel.border = element_blank(), panel.background = element_blank())
 	p = p + theme(legend.position = "top")	

@@ -24,7 +24,7 @@ Reads <- GenomicAlignments::first(alnReads)
 } else if(StrandType=='forward-reverse' | StrandType=='NONE'){
 Reads <- GenomicAlignments::last(alnReads)
 } else {
-Print("ERROR: StrandType is NOT Valid")						
+stop("ERROR: StrandType is NOT Valid")						
 }
 
 OutfileName = paste0(OutDirPath,"/",

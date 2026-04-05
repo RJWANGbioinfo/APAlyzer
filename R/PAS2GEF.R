@@ -1,3 +1,5 @@
+utils::globalVariables(c("group_name", "GENEID"))
+
 .annotatePAS_legacy<-function(pasdb,TXDB)
 {
 test_mm9 <- locateVariants(pasdb, TXDB, AllVariants())

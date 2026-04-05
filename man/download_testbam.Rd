@@ -5,7 +5,8 @@
 	download_testbam()	
 }
 \arguments{
-    }
+    None.
+}
 \description{
 	download bam files of mouse testis and heart
 }

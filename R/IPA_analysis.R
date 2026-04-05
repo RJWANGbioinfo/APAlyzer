@@ -105,7 +105,7 @@ PASEXP_IPA<-function(dfIPAraw, dfLEraw, flS,
     } else if(SeqType=="ThreeMostPairEnd"){
         isPairedEnd=TRUE
     } else {
-        Print("ERROR: SeqType is NOT Valid")	
+        stop("ERROR: SeqType is NOT Valid")	
     }
     for (k in seq_len(length(flS))){
         fls=flS[k]
