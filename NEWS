@@ -1,4 +1,4 @@
-Changes in version 1.9.5 (2026-04-05)
+Changes in version 1.25.2 (2026-04-05)
 + Fixed compatibility with R-devel and Bioconductor 3.22/3.23.
 + Fixed test failure caused by ggplot2 4.0+ S7 object type change.
 + Replaced deprecated element_line(size=) with element_line(linewidth=).
